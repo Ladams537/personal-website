@@ -1,0 +1,37 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const poems = (await getCollection('poetry'))
+    .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+
+  return poems.map((poem, i) => ({
+    params: { slug: poem.slug },
+    props: {
+      poem,
+      prev: poems[i - 1] ? { slug: poems[i - 1].slug, title: poems[i - 1].data.title } : null,
+      next: poems[i + 1] ? { slug: poems[i + 1].slug, title: poems[i + 1].data.title } : null,
+    },
+  }));
+}
+
+const { poem, prev, next } = Astro.props;
+const { Content } = await poem.render();
+---
+
+<PostLayout
+  title={poem.data.title}
+  date={poem.data.date}
+  tags={poem.data.tags}
+  type="poetry"
+  description={poem.data.excerpt}
+>
+  <Content />
+  {(prev || next) && (
+    <nav class="poem-nav">
+      {prev && <a href={`/poetry/${prev.slug}/`} class="poem-nav-link prev">&larr; {prev.title}</a>}
+      {next && <a href={`/poetry/${next.slug}/`} class="poem-nav-link next">{next.title} &rarr;</a>}
+    </nav>
+  )}
+</PostLayout>

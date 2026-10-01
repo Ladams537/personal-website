@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const projects = await getCollection('projects');
+const writing = (await Promise.all(['poetry', 'reflections', 'essays'].map(async type => (await getCollection(type as 'poetry' | 'reflections' | 'essays')).map(entry => ({ ...entry, type }))))).flat().sort((a,b) => b.data.date.valueOf()-a.data.date.valueOf()).slice(0,3);
+---
+<BaseLayout title="Louis Adams — Builder & poet">
+  <section class="intro">
+    <p class="eyebrow">Louis Adams / Portfolio</p>
+    <h1>Building things.<br /><em>Finding the words.</em></h1>
+    <div class="intro-bottom"><p>I'm Louis, a builder and poet. This is a home for the things I make, the ideas I follow, and the words I write along the way.</p><a href="mailto:louistadams3@gmail.com" class="text-link">Get in touch ↗</a></div>
+  </section>
+  <section id="work" class="portfolio-section">
+    <div class="section-heading"><h2>Selected work</h2><span class="eyebrow">01 project</span></div>
+    {projects.map(project => <a class="project-card" href={`/projects/${project.slug}/`}><div class="project-number" aria-hidden="true">01<span>POETRY<br />MEETS<br />SOFTWARE</span></div><div class="project-info"><p class="eyebrow">Web application / Community</p><h3>{project.data.title} <span aria-hidden="true">↗</span></h3><p>{project.data.summary}</p><div class="project-tags">{project.data.technologies.slice(0,4).map(tag => <span>{tag}</span>)}</div><span class="text-link">Explore the project →</span></div></a>)}
+  </section>
+  <section class="portfolio-section writing-section"><div class="section-heading"><h2>On the page</h2><a href="/writing/" class="text-link">All writing →</a></div><p class="section-description">Poetry, reflections, and essays. Another way of making sense of things.</p><ul class="writing-list">{writing.map(entry => <li><a href={`/${entry.type}/${entry.slug}/`}><span class="eyebrow">{entry.type}</span><h3>{entry.data.title}</h3><span aria-hidden="true">↗</span></a></li>)}</ul></section>
+</BaseLayout>

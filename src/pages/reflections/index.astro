@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allReflections = (await getCollection('reflections'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const byYear = new Map<number, typeof allReflections>();
+for (const ref of allReflections) {
+  const year = ref.data.date.getFullYear();
+  if (!byYear.has(year)) byYear.set(year, []);
+  byYear.get(year)!.push(ref);
+}
+---
+
+<BaseLayout title="Reflections — Louis Adams">
+  <h1 class="page-title">Reflections</h1>
+  <p class="section-intro">Weekly notes on building, writing, and being alive.</p>
+
+  {[...byYear.entries()].map(([year, refs]) => (
+    <div>
+      <h2 class="archive-year">{year}</h2>
+      <ul class="archive-list">
+        {refs.map(ref => (
+          <li class="archive-item">
+            <div>
+              <a href={`/reflections/${ref.slug}/`}>{ref.data.title}</a>
+              {ref.data.subtitle && <span class="excerpt">{ref.data.subtitle}</span>}
+            </div>
+            <time datetime={ref.data.date.toISOString()}>
+              {ref.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+            </time>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</BaseLayout>

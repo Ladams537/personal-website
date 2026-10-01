@@ -1,0 +1,8 @@
+node_modules
+dist
+.astro
+.git
+.env
+.env.*
+PORTFOLIO.md
+PROJECT-SOURCES.md

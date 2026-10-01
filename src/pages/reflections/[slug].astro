@@ -1,0 +1,27 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const reflections = await getCollection('reflections');
+  return reflections.map(ref => ({
+    params: { slug: ref.slug },
+    props: { ref },
+  }));
+}
+
+const { ref } = Astro.props;
+const { Content } = await ref.render();
+const readingTime = Math.max(1, Math.ceil((ref.body?.split(/\s+/).length ?? 0) / 200));
+---
+
+<PostLayout
+  title={ref.data.title}
+  date={ref.data.date}
+  tags={ref.data.tags}
+  type="reflections"
+  description={ref.data.subtitle}
+  readingTime={readingTime}
+>
+  <Content />
+</PostLayout>

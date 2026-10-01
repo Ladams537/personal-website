@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allEssays = (await getCollection('essays'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const byYear = new Map<number, typeof allEssays>();
+for (const essay of allEssays) {
+  const year = essay.data.date.getFullYear();
+  if (!byYear.has(year)) byYear.set(year, []);
+  byYear.get(year)!.push(essay);
+}
+---
+
+<BaseLayout title="Essays — Louis Adams">
+  <h1 class="page-title">Essays</h1>
+  <p class="section-intro">Longer-form writing on ideas that need room to breathe.</p>
+
+  {[...byYear.entries()].map(([year, essays]) => (
+    <div>
+      <h2 class="archive-year">{year}</h2>
+      <ul class="archive-list">
+        {essays.map(essay => (
+          <li class="archive-item">
+            <div>
+              <a href={`/essays/${essay.slug}/`}>{essay.data.title}</a>
+              {essay.data.excerpt && <span class="excerpt">{essay.data.excerpt}</span>}
+            </div>
+            <time datetime={essay.data.date.toISOString()}>
+              {essay.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+            </time>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</BaseLayout>

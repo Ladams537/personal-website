@@ -1,0 +1,478 @@
+:root {
+  /* Type scale */
+  --font-display: 'Cormorant Garamond', 'Georgia', serif;
+  --font-body: 'Source Serif 4', 'Georgia', serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+:root, [data-theme="dark"] {
+  --teal: #00d4aa;
+  --teal-dim: #00a88a;
+  --teal-glow: rgba(0, 212, 170, 0.08);
+  --bg: #0a0a0b;
+  --surface: #131315;
+  --surface-raised: #1a1a1d;
+  --border: #1f2023;
+  --text: #e8e6e3;
+  --text-secondary: #8a8a8f;
+  --text-muted: #555559;
+}
+
+[data-theme="light"] {
+  --teal: #009e80;
+  --teal-dim: #007d66;
+  --teal-glow: rgba(0, 158, 128, 0.06);
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-raised: #f0f0ee;
+  --border: #e0ddd8;
+  --text: #1a1a1a;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 20px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text);
+  background-color: var(--bg);
+  min-height: 100vh;
+}
+
+/* ——— Layout shell ——— */
+.site-container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  padding-bottom: 2rem;
+}
+
+.site-container--wide {
+  max-width: 900px;
+}
+
+/* ——— Typography ——— */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 3.2rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+}
+
+p {
+  margin-bottom: 1.2rem;
+}
+
+a {
+  color: var(--teal);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--text);
+}
+
+/* ——— Poem formatting ——— */
+.poem-body p {
+  margin-bottom: 0;
+  line-height: 1.9;
+}
+
+.poem-body br {
+  display: block;
+  content: '';
+  margin-bottom: 0;
+}
+
+/* Stanza breaks — use a blank line in markdown */
+.poem-body p + p {
+  margin-top: 1.6rem;
+}
+
+/* ——— Archive list (poems & reflections index) ——— */
+.archive-list {
+  list-style: none;
+}
+
+.archive-year {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 2.5rem;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.archive-year:first-child {
+  margin-top: 0;
+}
+
+.archive-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.15s ease;
+}
+
+.archive-item:hover {
+  background-color: var(--teal-glow);
+}
+
+.archive-item a {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+.archive-item a:hover {
+  color: var(--teal);
+}
+
+.archive-item time {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.archive-item .excerpt {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.15rem;
+}
+
+/* ——— Tags ——— */
+.tag {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--teal-dim);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  margin-right: 0.4rem;
+  margin-bottom: 0.3rem;
+}
+
+/* ——— Post/poem header ——— */
+.post-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.post-meta {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ——— Prose content (reflections) ——— */
+.prose h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.prose h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.prose blockquote {
+  border-left: 2px solid var(--teal-dim);
+  padding-left: 1.2rem;
+  margin: 1.5rem 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.prose ul, .prose ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.4rem;
+}
+
+.prose code {
+  font-size: 0.85em;
+  background: var(--surface-raised);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+.prose pre {
+  background: var(--surface);
+  padding: 1.2rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border: 1px solid var(--border);
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* ——— Page sections ——— */
+.page-title {
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}
+
+.section-intro {
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+}
+
+/* ——— Back link ——— */
+.back-link {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  margin-top: 3rem;
+}
+
+.back-link:hover {
+  color: var(--teal);
+}
+
+/* ——— Work page ——— */
+.work-placeholder {
+  margin-top: 2rem;
+  padding: 2rem;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+}
+
+.cta-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--bg);
+  background: var(--teal);
+  padding: 0.6rem 1.5rem;
+  border-radius: 3px;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.cta-link:hover {
+  color: var(--bg);
+  opacity: 0.85;
+}
+
+/* ——— Poem navigation ——— */
+.poem-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.poem-nav-link {
+  color: var(--text-muted);
+  max-width: 45%;
+}
+
+.poem-nav-link:hover {
+  color: var(--teal);
+}
+
+.poem-nav-link.next {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* ——— Fade-in animation ——— */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeUp 0.5s ease-out both;
+}
+
+.fade-in-delayed {
+  animation: fadeUp 0.5s ease-out 0.15s both;
+}
+
+/* ——— Responsive ——— */
+@media (max-width: 640px) {
+  html {
+    font-size: 17px;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+  }
+
+  .site-container {
+    padding: 0 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .archive-item .excerpt {
+    display: none;
+  }
+}
+
+/* Portfolio direction: open typography, teal ink, generous reading space. */
+:root { --font-display: Georgia, 'Times New Roman', serif; --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+:root, [data-theme="dark"] { --bg: #101716; --surface: #16211f; --surface-raised: #1b2b27; --border: #33413d; --text: #edf2ef; --text-secondary: #b7c3bd; --text-muted: #a0b2a9; --teal: #76d9b2; --teal-dim: #76d9b2; }
+[data-theme="light"] { --bg: #fcfcfa; --surface: #f0f5f2; --surface-raised: #e6eeea; --border: #d6dfd9; --text: #172b24; --text-secondary: #50645a; --text-muted: #607368; --teal: #21684f; --teal-dim: #21684f; }
+html { font-size: 18px; }
+body { line-height: 1.7; }
+.site-container { max-width: 1120px; padding: 0 48px 40px; }
+.site-nav .nav-inner { max-width: 1120px; padding: 26px 48px; }
+.site-nav .nav-logo-text { font-family: var(--font-body); font-size: 1.2rem; font-weight: 700; letter-spacing: -.06em; }
+.site-nav .nav-link { font-size: .8rem; letter-spacing: 0; text-transform: none; }
+.site-nav .nav-links { gap: 32px; }
+.site-nav .theme-toggle { border-radius: 50%; padding: 9px; }
+.intro { padding: 82px 0 68px; }
+.eyebrow { font-family: var(--font-body); font-size: .72rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--text-secondary); }
+.intro > .eyebrow { margin-bottom: 28px; }
+.intro h1 { font-size: clamp(2.7rem, 6.2vw, 4.6rem); line-height: 1.09; font-weight: 400; letter-spacing: -.045em; }
+h1 em { font-weight: 400; color: var(--teal); }
+.intro-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-top: 32px; }
+.intro-bottom p { max-width: 540px; color: var(--text-secondary); margin: 0; }
+.text-link { font-size: .82rem; font-weight: 500; white-space: nowrap; }
+.portfolio-section { margin-bottom: 68px; }
+.section-heading { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding: 24px 0; }
+.section-heading h2 { font-family: var(--font-body); font-size: 1rem; font-weight: 500; letter-spacing: -.015em; }
+.section-heading .eyebrow { margin: 0; }
+.project-card { display: grid; grid-template-columns: 34% 1fr; border: 1px solid var(--border); color: var(--text); transition: border-color .2s; }
+.project-card:hover { border-color: var(--teal); color: var(--text); }
+.project-number { min-height: 330px; background: var(--teal); color: var(--bg); padding: 24px 30px; font-family: Georgia, serif; font-size: 5.2rem; line-height: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.project-number span { font-family: var(--font-body); font-size: 1.2rem; letter-spacing: -.03em; line-height: 1.15; font-weight: 600; }
+.project-info { padding: 32px 38px; }
+.project-info .eyebrow { margin-bottom: 12px; }
+.project-info h3 { font-size: 1.9rem; line-height: 1.2; margin-bottom: 16px; }
+.project-info h3 span { font-size: 1.1rem; color: var(--teal); }
+.project-info > p:not(.eyebrow) { color: var(--text-secondary); font-size: .92rem; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0; }
+.project-tags span { padding: 3px 10px; border: 1px solid var(--border); font-size: .72rem; color: var(--text-secondary); }
+.project-info .text-link { color: var(--teal); }
+.section-description { max-width: 650px; color: var(--text-secondary); margin-top: 16px; }
+.writing-section .section-description { margin-top: -10px; font-size: .9rem; }
+.writing-list { list-style: none; }
+.writing-list li a { display: grid; grid-template-columns: 120px 1fr 24px; align-items: baseline; gap: 20px; border-bottom: 1px solid var(--border); padding: 20px 0; color: var(--text); }
+.writing-list li a:hover h3 { color: var(--teal); }
+.writing-list h3 { font-size: 1.3rem; }
+.writing-categories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.writing-categories a { border-top: 1px solid var(--border); padding-top: 24px; }
+.writing-categories h2 { font-size: 1.7rem; }
+.writing-categories p { margin-top: 16px; color: var(--text-secondary); }
+.project-detail, .post-header + .prose, .poem-body { max-width: 740px; }
+.project-detail h1 { font-size: clamp(2.3rem, 5vw, 3.5rem); font-weight: 400; }
+.prose { font-family: Georgia, serif; line-height: 1.85; }
+.prose h2 { font-size: 1.8rem; }
+.poem-body { font-family: Georgia, serif; }
+.archive-item a { font-size: 1.2rem; }
+.page-title { margin-top: 3rem; font-weight: 400; }
+.portfolio-footer { max-width: 1024px; margin: 24px auto 0; padding: 38px 0 28px; border-top: 1px solid var(--border); }
+.portfolio-footer .eyebrow { margin-bottom: 10px; }
+.footer-contact { font-family: Georgia, serif; font-size: 2.6rem; letter-spacing: -.03em; }
+.portfolio-footer .footer-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 45px; font-size: .75rem; color: var(--text-secondary); }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 5px; }
+.prose img, .poem-body img, .prose video, .poem-body video { display: block; max-width: 100%; height: auto; margin: 1.5rem auto; }
+.prose audio, .poem-body audio { display: block; width: 100%; margin: 1.5rem 0; }
+.prose figure, .poem-body figure { margin: 2rem 0; }
+.prose figure img, .poem-body figure img, .prose figure video, .poem-body figure video { margin: 0; }
+.prose figcaption, .poem-body figcaption { margin-top: .65rem; font-family: var(--font-ui); font-size: .8rem; line-height: 1.5; color: var(--text-secondary); }
+.media-embed { position: relative; aspect-ratio: 16 / 9; margin: 2rem 0; background: var(--surface); }
+.media-embed--portrait { aspect-ratio: 9 / 16; max-width: 400px; margin-inline: auto; }
+.media-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
+@media (max-width: 700px) {
+  .site-container { padding: 0 24px 24px; }
+  .site-nav .nav-inner { padding: 22px 24px; }
+  .site-nav .nav-links { gap: 18px; }
+  .site-nav .nav-right { gap: 16px; }
+  .intro { padding: 54px 0 48px; }
+  .intro-bottom { display: block; }
+  .intro-bottom .text-link { display: inline-block; margin-top: 24px; }
+  .project-card { grid-template-columns: 1fr; }
+  .project-number { min-height: 175px; flex-direction: row; align-items: flex-end; }
+  .project-info { padding: 26px 24px; }
+  .writing-list li a { grid-template-columns: 1fr 24px; gap: 4px; }
+  .writing-list .eyebrow { grid-column: 1 / -1; }
+  .writing-categories { grid-template-columns: 1fr; }
+  .portfolio-footer { margin: 16px 24px 0; }
+  .portfolio-footer .footer-meta { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
