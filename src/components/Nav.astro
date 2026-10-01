@@ -2,7 +2,7 @@
 const currentPath = Astro.url.pathname;
 
 const links = [
-  { href: '/#work', label: 'Work' },
+  { href: '/work/', label: 'Work' },
   { href: '/writing/', label: 'Writing' },
   { href: 'mailto:louistadams3@gmail.com', label: 'Contact ↗' },
 ];
@@ -18,7 +18,7 @@ const links = [
         {links.map(link => (
           <a
             href={link.href}
-            class:list={['nav-link', { active: link.label === 'Writing' && ['/writing/', '/poetry/', '/reflections/', '/essays/'].some(path => currentPath.startsWith(path)) }]}
+            class:list={['nav-link', { active: (link.label === 'Work' && ['/work/', '/projects/'].some(path => currentPath.startsWith(path))) || (link.label === 'Writing' && ['/writing/', '/poetry/', '/reflections/', '/essays/'].some(path => currentPath.startsWith(path))) }]}
           >
             {link.label}
           </a>

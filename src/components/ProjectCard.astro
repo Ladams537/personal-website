@@ -1,0 +1,19 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { project: CollectionEntry<'projects'>; }
+const { project } = Astro.props;
+---
+<a class="project-card" href={`/projects/${project.slug}/`}>
+  <div class="project-number" aria-hidden="true">
+    {String(project.data.order).padStart(2, '0')}
+    <span>{project.data.visualLabel.map(line => <span class="project-label-line">{line}</span>)}</span>
+  </div>
+  <div class="project-info">
+    <p class="eyebrow">{project.data.category}</p>
+    <h3>{project.data.title} <span aria-hidden="true">↗</span></h3>
+    <p>{project.data.summary}</p>
+    <p class="project-status">{project.data.status}</p>
+    <div class="project-tags">{project.data.technologies.slice(0, 4).map(tag => <span>{tag}</span>)}</div>
+    <span class="text-link">Explore the project →</span>
+  </div>
+</a>

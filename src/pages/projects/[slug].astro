@@ -8,9 +8,9 @@ const { project } = Astro.props;
 const { Content } = await project.render();
 ---
 <BaseLayout title={`${project.data.title} — Louis Adams`} description={project.data.summary}>
-  <a href="/#work" class="back-link">← Selected work</a>
+  <a href="/work/" class="back-link">← All work</a>
   <article class="project-detail">
-    <header class="post-header"><p class="eyebrow">Web application / Community</p><h1>{project.data.title}</h1><p class="section-description">{project.data.summary}</p><div class="project-tags">{project.data.technologies.map(tag => <span>{tag}</span>)}</div></header>
+    <header class="post-header"><p class="eyebrow">{project.data.category}</p><h1>{project.data.title}</h1><p class="section-description">{project.data.summary}</p><p class="project-status">{project.data.status}</p><div class="project-tags">{project.data.technologies.map(tag => <span>{tag}</span>)}</div></header>
     <div class="prose"><Content /></div>
   </article>
 </BaseLayout>

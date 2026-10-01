@@ -418,6 +418,15 @@ h1 em { font-weight: 400; color: var(--teal); }
 .section-heading .eyebrow { margin: 0; }
 .project-card { display: grid; grid-template-columns: 34% 1fr; border: 1px solid var(--border); color: var(--text); transition: border-color .2s; }
 .project-card:hover { border-color: var(--teal); color: var(--text); }
+.project-list { display: grid; gap: 24px; }
+.project-label-line { display: block; }
+.project-status { font-family: var(--font-body); font-size: .75rem; color: var(--text-secondary); }
+.project-info > .project-status { font-size: .75rem; }
+.experiment-list { list-style: none; }
+.experiment-list a { display: block; padding: 24px 0; border-bottom: 1px solid var(--border); color: var(--text); }
+.experiment-list h3 { font-size: 1.6rem; margin-bottom: 12px; }
+.experiment-list a:hover h3 { color: var(--teal); }
+.experiment-list p:last-child { max-width: 650px; color: var(--text-secondary); margin-bottom: 0; }
 .project-number { min-height: 330px; background: var(--teal); color: var(--bg); padding: 24px 30px; font-family: Georgia, serif; font-size: 5.2rem; line-height: 1; display: flex; flex-direction: column; justify-content: space-between; }
 .project-number span { font-family: var(--font-body); font-size: 1.2rem; letter-spacing: -.03em; line-height: 1.15; font-weight: 600; }
 .project-info { padding: 32px 38px; }

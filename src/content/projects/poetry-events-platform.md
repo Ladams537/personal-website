@@ -1,6 +1,11 @@
 ---
 title: "Poetry Events Platform"
 summary: "A project to make London's poetry scene easier to discover, with event listings, RSVPs, and recommendations through shared attendance."
+category: "Web application / Community"
+visualLabel: ["POETRY", "MEETS", "SOFTWARE"]
+status: "Learning project"
+order: 1
+featured: true
 technologies:
   - TypeScript
   - SvelteKit
@@ -41,3 +46,15 @@ Authentication uses JWT access tokens and refresh-token cookies. Refresh tokens 
 The repository contains API end-to-end tests for registration, login, event creation, RSVPs, and recommendations. A second test covers refresh-cookie settings, token rotation, and rejection of a previously used refresh token.
 
 The README includes local setup instructions and deployment instructions for a Fly backend and Vercel frontend.
+
+## Related work: finding the listings
+
+A separate London Poetry Events Scraper explores another part of the same problem: bringing listings from different sources into one place. Its TypeScript CLI fetches public event pages from Eventbrite and the Poetry Society, extracts structured event data, validates each source's records, and normalises and deduplicates the results.
+
+It can generate a static dashboard with search, venue and source filters, and events grouped by date. That makes the collected listings browsable without running an application server.
+
+The scraper and platform are separate projects. Together they explore two sides of discovery: collecting what's happening, and helping someone decide where to go.
+
+## Where it stands
+
+This is a learning project with implemented browsing, attendance and recommendation flows. The repository includes deployment instructions; this case study describes the implementation rather than claiming a public launch or measured adoption.

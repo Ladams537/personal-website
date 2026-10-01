@@ -32,6 +32,10 @@ const essays = defineCollection({
 
 const projects = defineCollection({
   type: 'content',
-  schema: z.object({ title: z.string(), summary: z.string(), technologies: z.array(z.string()) }),
+  schema: z.object({
+    title: z.string(), summary: z.string(), technologies: z.array(z.string()),
+    category: z.string(), visualLabel: z.array(z.string()).min(1).max(3),
+    status: z.string(), order: z.number().int().positive(), featured: z.boolean().default(false),
+  }),
 });
 export const collections = { poetry, reflections, essays, projects };
