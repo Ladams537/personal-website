@@ -11,6 +11,16 @@ const maxStack = Math.max(1, ...[...byWeek.values()].map(s => s.length));
 const BASE = 150, STEP = Math.min(10, 126 / maxStack), DOT = Math.min(4.2, STEP * 0.44);
 const ang = (w: number) => ((w + 0.5) / 52) * 2 * Math.PI - Math.PI / 2;
 const pt = (a: number, r: number) => [r * Math.cos(a), r * Math.sin(a)];
+// Ongoing projects: an arc just inside the baseline, from their start (or 1 Jan) to today (or 31 Dec).
+const now = new Date();
+const frac = (d: Date) => (d.getTime() - Date.UTC(d.getUTCFullYear(), 0, 1)) / (365 * 864e5);
+const arcs = (y: number) => items.filter(i => i.ongoing && i.date && i.year <= y && y <= now.getFullYear()).map(i => {
+  const start = i.year === y ? frac(new Date(i.date + 'T00:00:00Z')) : 0;
+  const end = y === now.getFullYear() ? frac(new Date(Date.UTC(y, now.getMonth(), now.getDate()))) : 1;
+  const n = 120, r = BASE - 5;
+  const d = Array.from({ length: n + 1 }, (_, j) => { const a = (start + ((end - start) * j) / n) * 2 * Math.PI - Math.PI / 2; return `${j ? 'L' : 'M'}${(r * Math.cos(a)).toFixed(1)},${(r * Math.sin(a)).toFixed(1)}`; }).join('');
+  return { d, it: i };
+});
 const envelope = (y: number) => Array.from({ length: 52 }, (_, w) => {
   const n = byWeek.get(`${y}-${w}`)?.length ?? 0;
   const [x, yy] = pt(ang(w), BASE + (n ? 6 + n * STEP : 0));
@@ -28,9 +38,10 @@ const envelope = (y: number) => Array.from({ length: 52 }, (_, w) => {
   {years.map(y => <path d={envelope(y)} class="env" data-y={y} />)}
   {years.map(y => (
     <g class="yr" data-y={y}>
+      {arcs(y).map(({ d, it }) => <path d={d} class="ongoing" style={`--c: var(--k-${it.k})`}><title>{it.t}: {it.when}</title></path>)}
       {Array.from({ length: 52 }, (_, w) => (byWeek.get(`${y}-${w}`) ?? []).map((it, i) => {
         const [x, yy] = pt(ang(w), BASE + 6 + i * STEP + DOT);
-        return <a href={it.href} class="mark-link" aria-label={`${it.t}, ${it.date}`}><circle cx={x} cy={yy} r={DOT} class:list={['mark', { rec: it.recorded }]} data-k={it.k} data-t={it.t} data-d={it.date} data-rec={it.recorded ? '1' : undefined} style={`--c: var(--k-${it.k}); --w: ${w}`} /></a>;
+        return <a href={it.href} class="mark-link" aria-label={`${it.t}, ${it.date}`}><circle cx={x} cy={yy} r={DOT} class:list={['mark', { rec: it.recorded }]} data-k={it.k} data-t={it.t} data-d={it.date} data-rec={it.recorded ? '1' : undefined} data-when={it.when} style={`--c: var(--k-${it.k}); --w: ${w}`} /></a>;
       }))}
     </g>
   ))}
@@ -43,6 +54,7 @@ const envelope = (y: number) => Array.from({ length: 52 }, (_, w) => {
   .yeardial .spoke { stroke: color-mix(in oklab, var(--ink-fg) 6%, transparent); }
   .yeardial .tick { stroke: color-mix(in oklab, var(--ink-fg) 45%, transparent); }
   .yeardial .month { fill: var(--ink-dim); font: 400 11px var(--mono); text-anchor: middle; dominant-baseline: middle; text-transform: uppercase; letter-spacing: .1em; }
+  .yeardial .ongoing { fill: none; stroke: var(--c); stroke-width: 3; stroke-linecap: round; opacity: .85; }
   .yeardial .yr { display: none; }
   .yeardial .yr.on { display: inline; }
   .yeardial .mark { fill: var(--c); cursor: pointer; outline: none; transition: r .15s, opacity .3s; }

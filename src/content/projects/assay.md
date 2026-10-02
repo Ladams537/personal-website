@@ -6,6 +6,7 @@ visualLabel: ["RULES", "WITH", "REASONS"]
 status: "Local CLI & Rust library"
 order: 3
 featured: true
+date: 2026-09-01
 technologies: [Rust, Parsing, Static analysis, JSON]
 ---
 

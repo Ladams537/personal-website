@@ -6,6 +6,7 @@ visualLabel: ["FOLLOW", "THE", "CLUES"]
 status: "Interactive prototype"
 order: 4
 featured: true
+date: 2026-06-01
 technologies: [TypeScript, Next.js, React, AI SDK, Zod]
 ---
 
