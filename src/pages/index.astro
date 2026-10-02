@@ -4,7 +4,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../components/Layout.astro';
 import Spiral from '../components/Spiral.astro';
-import { getArchive, firstStanza } from '../components/content';
+import { getArchive, firstStanza, fmtMonth } from '../components/content';
 
 const archive = await getArchive();
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -30,7 +30,7 @@ const thisYear = archive.filter(i => i.year === new Date().getFullYear()).length
         <p class="lede">I'm Louis, a builder and poet. This is a home for the things I make, the ideas I follow, and the words I write along the way.</p>
         <ol class="proj">
           {featured.map((p, i) => (
-            <li><a href={`/projects/${p.slug}/`}><span class="n">{String(i + 1).padStart(2, '0')}</span><span class="t">{p.data.title}</span><span class="s">{p.data.status}</span><span class="d">{p.data.category}</span></a></li>
+            <li><a href={`/projects/${p.slug}/`}><span class="n">{String(i + 1).padStart(2, '0')}</span><span class="t">{p.data.title}</span><span class="s">{p.data.status}</span><span class="d">{p.data.category}{p.data.date && ` · ${fmtMonth(p.data.date.toISOString().slice(0, 10))}${p.data.ongoing ? ' – present' : ''}`}</span></a></li>
           ))}
         </ol>
         <div class="deep">

@@ -3,7 +3,7 @@
 // The preview panel is a small patch of ink: each item's generative cover is "built".
 import Layout from '../components/Layout.astro';
 import { getArchive, type Kind } from '../components/content';
-// Newest first; undated projects (ongoing work) sort to the top.
+// Newest first; undated projects sort to the top.
 const rows = (await getArchive()).reverse();
 const kinds: Kind[] = ['project', 'poem', 'essay', 'reflection'];
 const label = { project: 'Projects', poem: 'Poems', essay: 'Essays', reflection: 'Reflections' };
@@ -27,8 +27,8 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
     <div class="body">
       <ol class="list">
         {rows.map(r => (
-          <li class="row" data-k={r.k} data-d={r.date ?? ''} data-note={r.note} data-tags={r.tags.join(' · ')} data-rec={r.recorded ? '1' : undefined}>
-            <span class="y">{r.date ? r.date.slice(0, 7).replace('-', '.') : 'ongoing'}</span>
+          <li class="row" data-k={r.k} data-d={r.date ?? ''} data-when={r.when} data-note={r.note} data-tags={r.tags.join(' · ')} data-rec={r.recorded ? '1' : undefined}>
+            <span class="y">{r.date ? r.date.slice(0, 7).replace('-', '.') + (r.ongoing ? ' →' : '') : '—'}</span>
             <span class="kind" style={`--c: var(--k-${r.k})`}>{r.k}</span>
             <a class="t" href={r.href}>{r.t}{r.recorded && <b class="rec" title="Has a recording">● rec</b>}</a>
             <span class="arrow">↵</span>
@@ -52,7 +52,6 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
   </dialog>
 
   <script>
-    import { fmt } from '../components/format';
     const rows = [...document.querySelectorAll<HTMLLIElement>('.row')];
     const q = document.querySelector<HTMLInputElement>('#q')!;
     let kind = 'all', idx = 0;
@@ -73,7 +72,7 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
       const t = r.querySelector('.t')!.firstChild!.textContent!;
       const d = r.dataset.d;
       document.querySelector('#pv-title')!.textContent = t;
-      document.querySelector('#pv-kind')!.textContent = [r.dataset.k, d ? fmt(d) : 'ongoing', r.dataset.rec ? 'recorded' : ''].filter(Boolean).join(' · ');
+      document.querySelector('#pv-kind')!.textContent = [r.dataset.k, r.dataset.when || 'undated', r.dataset.rec ? 'recorded' : ''].filter(Boolean).join(' · ');
       document.querySelector('#pv-note')!.textContent = r.dataset.note ?? '';
       document.querySelector('#pv-tags')!.textContent = r.dataset.tags ?? '';
       const alm = document.querySelector<HTMLAnchorElement>('#pv-alm')!;

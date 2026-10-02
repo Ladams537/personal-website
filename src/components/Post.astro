@@ -15,10 +15,12 @@ interface Props {
   status?: string;
   prev?: Link | null;
   next?: Link | null;
+  /** Overrides the day-level date label, e.g. "September 2026 – present" for projects. */
+  when?: string;
   /** Raw markdown, used for the reading-time estimate. */
   body?: string;
 }
-const { kind, title, date, eyebrow, lede, tags = [], status, prev, next, body = '' } = Astro.props;
+const { kind, title, date, eyebrow, lede, tags = [], status, prev, next, when, body = '' } = Astro.props;
 const ground = kind === 'project' ? 'ink' : 'paper';
 const iso = date?.toISOString().slice(0, 10);
 const words = kind === 'poem' ? 0 : body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
@@ -33,7 +35,7 @@ const minutes = Math.max(1, Math.round(words / 230));
       <h1>{title}</h1>
       {lede && <p class="post-lede">{lede}</p>}
       <p class="mono post-meta">
-        {iso && <a href={`/almanac/#year-${iso.slice(0, 4)}`} title="See it on the Almanac">{fmt(iso)}</a>}
+        {iso && <a href={`/almanac/#year-${iso.slice(0, 4)}`} title="See it on the Almanac">{when ?? fmt(iso)}</a>}
         {status && <span>{status}</span>}
         {kind !== 'poem' && words > 0 && <span>{minutes} min read</span>}
       </p>

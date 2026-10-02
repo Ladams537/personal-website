@@ -6,6 +6,8 @@ visualLabel: ["MESSY LOGS", "USEFUL", "HISTORY"]
 status: "Prototype / Milestone 1"
 order: 2
 featured: true
+date: 2026-09-01
+ongoing: true
 technologies: [TypeScript, Next.js, PostgreSQL, Drizzle, AI SDK, Zod]
 ---
 

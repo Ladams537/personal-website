@@ -23,6 +23,13 @@ const sector = (r1: number, r2: number, a1: number, a2: number) => {
   return `M${p(r1, a1)} L${p(r2, a1)} A${r2},${r2} 0 0 1 ${p(r2, a2)} L${p(r1, a2)} A${r1},${r1} 0 0 0 ${p(r1, a1)}Z`;
 };
 const [nx, ny] = pt(tNow);
+// Ongoing projects run as a thread along the spiral from their start to today.
+const tOf = (d: string) => +d.slice(0, 4) - y0 + (+d.slice(5, 7) - 1 + (+d.slice(8, 10) - 1) / 30.4) / 12;
+const threads = items.filter(i => i.ongoing && i.date).map(i => {
+  const t0 = tOf(i.date!), n = Math.max(2, Math.ceil((tNow - t0) * 240));
+  const d = Array.from({ length: n + 1 }, (_, j) => { const t = t0 + ((tNow - t0) * j) / n; const [x, y] = pt(t, rad(t) - 4); return `${j ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`; }).join('');
+  return { d, it: i };
+});
 ---
 <svg class:list={['spiral', { mini }]} viewBox={`${-OUT - 30} ${-OUT - 30} ${2 * OUT + 60} ${2 * OUT + 60}`} role="img" aria-label="Published work on a spiral across years">
   {months.map((m, i) => {
@@ -34,6 +41,7 @@ const [nx, ny] = pt(tNow);
     </g>;
   })}
   <path d={spiral} class="thread" pathLength="1" />
+  {threads.map(({ d, it }) => <path d={d} class="ongoing" style={`--c: var(--k-${it.k})`}><title>{it.t}: {it.when}</title></path>)}
   {!mini && years.map(y => { const [x, yy] = pt(y - y0); return (
     <a href={`#year-${y}`} class="yl-link" data-y={y} aria-label={`Open ${y} in the year view`}>
       <rect x={x - 44} y={yy - 20} width="44" height="20" class="yl-hit" /><text x={x - 6} y={yy - 6} class="yl">{y}</text>
@@ -41,7 +49,7 @@ const [nx, ny] = pt(tNow);
   {Array.from(stacks(items).values()).flatMap(stack => stack.map((it, i) => {
     const t = it.year - y0 + (it.week + 0.5) / 52;
     const [x, y] = pt(t, rad(t) + 5 + i * STEP + DOT);
-    const dot = <circle cx={x} cy={y} r={DOT} class:list={['mark', { rec: it.recorded }]} data-k={it.k} data-t={it.t} data-d={it.date} data-m={+it.date!.slice(5, 7) - 1} data-tt={t.toFixed(3)} data-rec={it.recorded ? '1' : undefined} style={`--c: var(--k-${it.k})`} />;
+    const dot = <circle cx={x} cy={y} r={DOT} class:list={['mark', { rec: it.recorded }]} data-k={it.k} data-t={it.t} data-d={it.date} data-m={+it.date!.slice(5, 7) - 1} data-tt={t.toFixed(3)} data-rec={it.recorded ? '1' : undefined} data-when={it.when} style={`--c: var(--k-${it.k})`} />;
     return mini ? dot : <a href={it.href} class="mark-link" aria-label={`${it.t}, ${it.date}`}>{dot}</a>;
   }))}
   <g class="now"><circle cx={nx} cy={ny} r="5" /><circle cx={nx} cy={ny} r="10" class="pulse" />{!mini && <text x={nx + 12} y={ny + 4}>now</text>}</g>
@@ -54,6 +62,8 @@ const [nx, ny] = pt(tNow);
   .spiral .month-g.lit .wedge { fill: color-mix(in oklab, var(--accent) 12%, transparent); }
   .spiral .month { fill: var(--ink-dim); font: 400 11px var(--mono); text-anchor: middle; dominant-baseline: middle; text-transform: uppercase; letter-spacing: .1em; }
   .spiral .month-g.lit .month { fill: var(--accent); }
+  .spiral .ongoing { fill: none; stroke: var(--c); stroke-width: 3; stroke-linecap: round; opacity: .85; }
+  .spiral.spot .ongoing { opacity: .15; }
   .spiral .thread { fill: none; stroke: color-mix(in oklab, var(--ink-fg) 28%, transparent); stroke-width: 1; }
   .spiral .yl { fill: var(--accent); font: 400 10px var(--mono); text-anchor: end; letter-spacing: .08em; }
   .spiral .yl-hit { fill: transparent; }

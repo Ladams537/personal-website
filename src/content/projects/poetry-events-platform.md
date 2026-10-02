@@ -6,6 +6,7 @@ visualLabel: ["POETRY", "MEETS", "SOFTWARE"]
 status: "Learning project"
 order: 1
 featured: true
+date: 2026-05-01
 technologies:
   - TypeScript
   - SvelteKit

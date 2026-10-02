@@ -34,7 +34,7 @@ const facts = Object.fromEntries(years.map(y => {
     <header class="alm-head">
       <p class="mono dim">The Almanac</p>
       <h1>When the work <em>happened.</em></h1>
-      <p class="lede">Every poem, weekly reflection and essay, placed on the day it went out. Busy weeks pile up. Quiet months stay quiet.</p>
+      <p class="lede">Every poem, weekly reflection, essay and project, placed on the day it went out. Busy weeks pile up. Quiet months stay quiet. Work still under way trails a thread to today.</p>
     </header>
 
     <div class="alm-controls">
@@ -71,7 +71,6 @@ const facts = Object.fromEntries(years.map(y => {
   </main>
 
   <script>
-    import { fmt } from '../components/format';
     const spiral = document.querySelector<SVGSVGElement>('.spiral')!;
     const dial = document.querySelector<SVGSVGElement>('.yeardial')!;
     const ck = document.querySelector('#ck')!, ct = document.querySelector('#ct')!, cd = document.querySelector('#cd')!;
@@ -112,7 +111,7 @@ const facts = Object.fromEntries(years.map(y => {
 
     document.querySelectorAll<SVGAElement>('.mark-link').forEach(a => {
       const m = a.querySelector<SVGCircleElement>('.mark')!;
-      const on = () => say(m.dataset.k! + (m.dataset.rec ? ' · recorded' : ''), m.dataset.t!, fmt(m.dataset.d!));
+      const on = () => say(m.dataset.k! + (m.dataset.rec ? ' · recorded' : ''), m.dataset.t!, m.dataset.when!);
       a.addEventListener('mouseenter', on); a.addEventListener('focus', on);
       a.addEventListener('mouseleave', reset); a.addEventListener('blur', reset);
     });

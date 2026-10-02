@@ -15,6 +15,10 @@ export interface Item {
   note: string;
   tags: string[];
   recorded: boolean;
+  /** Projects only: still in active development. */
+  ongoing: boolean;
+  /** Human date: a day for writing, a month (or "<month> – present") for projects. */
+  when: string;
 }
 
 export const kindLabel: Record<Kind, string> = { poem: 'Poems', reflection: 'Reflections', essay: 'Essays', project: 'Projects' };
@@ -23,11 +27,12 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 const weekOf = (d: Date) => Math.min(51, Math.floor((d.getTime() - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5 / 7));
 const hasVideo = (body: string) => /<video|<iframe|\.mp4/.test(body);
 
-function item(k: Kind, base: string, e: { slug: string; body: string }, t: string, date: Date | undefined, note: string, tags: string[] = []): Item {
+function item(k: Kind, base: string, e: { slug: string; body: string }, t: string, date: Date | undefined, note: string, tags: string[] = [], ongoing = false): Item {
+  const when = !date ? '' : k === 'project' ? fmtMonth(iso(date)) + (ongoing ? ' – present' : '') : fmt(iso(date));
   return {
     k, t, slug: e.slug, href: `/${base}/${e.slug}/`,
     date: date ? iso(date) : null, year: date?.getUTCFullYear() ?? 0, week: date ? weekOf(date) : 0,
-    note, tags, recorded: hasVideo(e.body),
+    note, tags, recorded: hasVideo(e.body), ongoing, when,
   };
 }
 
@@ -40,7 +45,7 @@ export async function getArchive(): Promise<Item[]> {
     ...reflections.map(e => item('reflection', 'reflections', e, e.data.title, e.data.date, e.data.subtitle ?? '', e.data.tags)),
     ...essays.map(e => item('essay', 'essays', e, e.data.title, e.data.date, e.data.excerpt ?? '', e.data.tags)),
     // Descending `order`, so after the Index reverses the (stable) sort, undated projects read 1, 2, 3…
-    ...[...projects].sort((x, y) => y.data.order - x.data.order).map(e => item('project', 'projects', e, e.data.title, e.data.date, e.data.summary, e.data.technologies)),
+    ...[...projects].sort((x, y) => y.data.order - x.data.order).map(e => item('project', 'projects', e, e.data.title, e.data.date, e.data.summary, e.data.technologies, e.data.ongoing)),
   ].sort((a, b) => (a.date ?? '9999').localeCompare(b.date ?? '9999') || order.indexOf(a.k) - order.indexOf(b.k));
 }
 
@@ -64,4 +69,5 @@ export function firstStanza(entry: CollectionEntry<'poetry'>, max = 4) {
   return entry.body.trim().split(/\n\s*\n/)[0].split('\n').map(l => l.trim()).filter(Boolean).slice(0, max);
 }
 
-export { months, fmt } from './format';
+import { fmt, fmtMonth } from './format';
+export { months, fmt, fmtMonth } from './format';

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Post from '../../components/Post.astro';
+import { fmtMonth } from '../../components/format';
 
 export async function getStaticPaths() {
   const entries = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -10,7 +11,8 @@ export async function getStaticPaths() {
 const { entry, prev, next } = Astro.props;
 const { Content } = await entry.render();
 const d = entry.data;
+const when = d.date && fmtMonth(d.date.toISOString().slice(0, 10)) + (d.ongoing ? ' – present' : '');
 ---
-<Post kind="project" title={d.title} date={d.date} eyebrow={d.category} lede={d.summary} status={d.status} tags={d.technologies} prev={prev} next={next} body={entry.body}>
+<Post kind="project" title={d.title} date={d.date} when={when || undefined} eyebrow={d.category} lede={d.summary} status={d.status} tags={d.technologies} prev={prev} next={next} body={entry.body}>
   <Content />
 </Post>
