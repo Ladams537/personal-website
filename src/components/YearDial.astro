@@ -1,0 +1,62 @@
+---
+// One calendar year as a dial: 52 week spokes, work stacked outward from the baseline.
+// All years are rendered; the page shows one at a time. Last year's outline is a dashed ghost.
+import { stacks, yearsOf, months, type Item } from './content';
+interface Props { items: Item[] }
+const { items } = Astro.props;
+const years = yearsOf(items);
+const byWeek = stacks(items);
+// Stacks shrink their spacing so the busiest week still stays inside the month ring.
+const maxStack = Math.max(1, ...[...byWeek.values()].map(s => s.length));
+const BASE = 150, STEP = Math.min(10, 126 / maxStack), DOT = Math.min(4.2, STEP * 0.44);
+const ang = (w: number) => ((w + 0.5) / 52) * 2 * Math.PI - Math.PI / 2;
+const pt = (a: number, r: number) => [r * Math.cos(a), r * Math.sin(a)];
+const envelope = (y: number) => Array.from({ length: 52 }, (_, w) => {
+  const n = byWeek.get(`${y}-${w}`)?.length ?? 0;
+  const [x, yy] = pt(ang(w), BASE + (n ? 6 + n * STEP : 0));
+  return `${w ? 'L' : 'M'}${x.toFixed(1)},${yy.toFixed(1)}`;
+}).join('') + 'Z';
+---
+<svg class="yeardial" viewBox="-345 -345 690 690" role="img" aria-label="Published work by week of the year">
+  <circle r={BASE} class="base" />
+  {Array.from({ length: 52 }, (_, w) => { const [x1, y1] = pt(ang(w), BASE - 6), [x2, y2] = pt(ang(w), 296); return <line x1={x1} y1={y1} x2={x2} y2={y2} class="spoke" />; })}
+  {months.map((m, i) => {
+    const a = (i / 12) * 2 * Math.PI - Math.PI / 2, mid = ((i + 0.5) / 12) * 2 * Math.PI - Math.PI / 2;
+    const [x1, y1] = pt(a, 290), [x2, y2] = pt(a, 304), [lx, ly] = pt(mid, 320);
+    return <g><line x1={x1} y1={y1} x2={x2} y2={y2} class="tick" /><text x={lx} y={ly} class="month">{m}</text></g>;
+  })}
+  {years.map(y => <path d={envelope(y)} class="env" data-y={y} />)}
+  {years.map(y => (
+    <g class="yr" data-y={y}>
+      {Array.from({ length: 52 }, (_, w) => (byWeek.get(`${y}-${w}`) ?? []).map((it, i) => {
+        const [x, yy] = pt(ang(w), BASE + 6 + i * STEP + DOT);
+        return <a href={it.href} class="mark-link" aria-label={`${it.t}, ${it.date}`}><circle cx={x} cy={yy} r={DOT} class:list={['mark', { rec: it.recorded }]} data-k={it.k} data-t={it.t} data-d={it.date} data-rec={it.recorded ? '1' : undefined} style={`--c: var(--k-${it.k}); --w: ${w}`} /></a>;
+      }))}
+    </g>
+  ))}
+  <g class="hand"><line x1="0" y1={-BASE} x2="0" y2="-300" /><circle cy="-300" r="4" /></g>
+</svg>
+
+<style is:global>
+  .yeardial { width: 100%; height: auto; display: block; overflow: visible; }
+  .yeardial .base { fill: none; stroke: color-mix(in oklab, var(--ink-fg) 25%, transparent); }
+  .yeardial .spoke { stroke: color-mix(in oklab, var(--ink-fg) 6%, transparent); }
+  .yeardial .tick { stroke: color-mix(in oklab, var(--ink-fg) 45%, transparent); }
+  .yeardial .month { fill: var(--ink-dim); font: 400 11px var(--mono); text-anchor: middle; dominant-baseline: middle; text-transform: uppercase; letter-spacing: .1em; }
+  .yeardial .yr { display: none; }
+  .yeardial .yr.on { display: inline; }
+  .yeardial .mark { fill: var(--c); cursor: pointer; outline: none; transition: r .15s, opacity .3s; }
+  .yeardial .mark:hover, .yeardial .mark-link:focus-visible .mark { r: 7; }
+  .yeardial .mark.rec { stroke: var(--accent-ink); stroke-width: 1.6; paint-order: stroke; }
+  .yeardial .mark-link { outline: none; }
+  .yeardial .yr.on .mark { animation: grow .5s cubic-bezier(.2,1.3,.4,1) backwards; animation-delay: calc(var(--w) * 14ms); transform-box: fill-box; transform-origin: center; }
+  @keyframes grow { from { opacity: 0; transform: scale(0); } }
+  .yeardial .env { fill: none; opacity: 0; transition: opacity .4s; }
+  .yeardial .env.cur { opacity: 1; fill: color-mix(in oklab, var(--ink-fg) 4%, transparent); }
+  .yeardial .env.prev { opacity: 1; stroke: color-mix(in oklab, var(--ink-fg) 45%, transparent); stroke-dasharray: 3 4; }
+  .yeardial.no-ghost .env.prev { opacity: 0; }
+  .yeardial .hand { transition: transform 2s cubic-bezier(.3,.9,.2,1); }
+  .yeardial .hand line { stroke: var(--accent); stroke-width: 1.5; } .yeardial .hand circle { fill: var(--accent); }
+  .yeardial.hide-poem .mark[data-k='poem'], .yeardial.hide-reflection .mark[data-k='reflection'],
+  .yeardial.hide-project .mark[data-k='project'], .yeardial.hide-essay .mark[data-k='essay'] { opacity: .06; pointer-events: none; }
+</style>

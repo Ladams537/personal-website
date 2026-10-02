@@ -1,4 +1,0 @@
----
-import BaseLayout from '../layouts/BaseLayout.astro';
----
-<BaseLayout title="Writing — Louis Adams"><section class="intro"><p class="eyebrow">On the page</p><h1>A life,<br /><em>in words.</em></h1><p class="section-description">Poetry, reflections, and essays from Ardent.</p></section><div class="writing-categories">{[{name:'Poetry',href:'/poetry/',description:'Compressed wit with emotional weight.'},{name:'Reflections',href:'/reflections/',description:'Notes on life and what it teaches.'},{name:'Essays',href:'/essays/',description:'Ideas that need room to breathe.'}].map(item => <a href={item.href}><h2>{item.name} ↗</h2><p>{item.description}</p></a>)}</div></BaseLayout>

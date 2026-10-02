@@ -1,27 +1,16 @@
 ---
-import PostLayout from '../../layouts/PostLayout.astro';
 import { getCollection } from 'astro:content';
+import Post from '../../components/Post.astro';
 
 export async function getStaticPaths() {
-  const reflections = await getCollection('reflections');
-  return reflections.map(ref => ({
-    params: { slug: ref.slug },
-    props: { ref },
-  }));
+  const entries = (await getCollection('reflections')).sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+  const link = (e?: (typeof entries)[number]) => (e ? { href: `/reflections/${e.slug}/`, title: e.data.title } : null);
+  return entries.map((entry, i) => ({ params: { slug: entry.slug }, props: { entry, prev: link(entries[i - 1]), next: link(entries[i + 1]) } }));
 }
-
-const { ref } = Astro.props;
-const { Content } = await ref.render();
-const readingTime = Math.max(1, Math.ceil((ref.body?.split(/\s+/).length ?? 0) / 200));
+const { entry, prev, next } = Astro.props;
+const { Content } = await entry.render();
+const data = entry.data as { title: string; date: Date; tags?: string[]; excerpt?: string; subtitle?: string };
 ---
-
-<PostLayout
-  title={ref.data.title}
-  date={ref.data.date}
-  tags={ref.data.tags}
-  type="reflections"
-  description={ref.data.subtitle}
-  readingTime={readingTime}
->
+<Post kind="reflection" title={data.title} date={data.date} lede={data.excerpt ?? data.subtitle} tags={data.tags} prev={prev} next={next} body={entry.body}>
   <Content />
-</PostLayout>
+</Post>

@@ -1,0 +1,100 @@
+---
+// Detail page for any piece. Writing sits on the paper ground; projects on the ink ground.
+import Layout from './Layout.astro';
+import { fmt } from './format';
+import type { Kind } from './content';
+
+interface Link { href: string; title: string }
+interface Props {
+  kind: Kind;
+  title: string;
+  date?: Date;
+  eyebrow?: string;
+  lede?: string;
+  tags?: string[];
+  status?: string;
+  prev?: Link | null;
+  next?: Link | null;
+  /** Raw markdown, used for the reading-time estimate. */
+  body?: string;
+}
+const { kind, title, date, eyebrow, lede, tags = [], status, prev, next, body = '' } = Astro.props;
+const ground = kind === 'project' ? 'ink' : 'paper';
+const iso = date?.toISOString().slice(0, 10);
+const words = kind === 'poem' ? 0 : body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 230));
+---
+<Layout title={`${title} — Louis Adams`} ground={ground} description={lede}>
+  <main class:list={['post', `post-${kind}`]}>
+    <header class="post-head">
+      <p class="mono post-eyebrow">
+        <a href="/archive/">Index</a> / {eyebrow ?? kind}
+      </p>
+      <h1>{title}</h1>
+      {lede && <p class="post-lede">{lede}</p>}
+      <p class="mono post-meta">
+        {iso && <a href={`/almanac/#year-${iso.slice(0, 4)}`} title="See it on the Almanac">{fmt(iso)}</a>}
+        {status && <span>{status}</span>}
+        {kind !== 'poem' && words > 0 && <span>{minutes} min read</span>}
+      </p>
+      {tags.length > 0 && <p class="post-tags">{tags.map(t => <span>{t}</span>)}</p>}
+    </header>
+
+    <article class:list={[kind === 'poem' ? 'verse' : 'prose']}>
+      <slot />
+    </article>
+
+    {(prev || next) && (
+      <nav class="post-nav">
+        {prev ? <a href={prev.href} class="pn prev"><span class="mono">← {kind === 'project' ? 'previous' : 'older'}</span>{prev.title}</a> : <span></span>}
+        {next ? <a href={next.href} class="pn next"><span class="mono">{kind === 'project' ? 'next' : 'newer'} →</span>{next.title}</a> : <span></span>}
+      </nav>
+    )}
+  </main>
+
+  <style is:global>
+    .post { --fg: var(--paper-fg); --dim: var(--paper-dim); --rule: color-mix(in oklab, var(--paper-fg) 14%, transparent);
+      max-width: 760px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 32px) 120px; }
+    body[data-ground='ink'] .post { --fg: var(--ink-fg); --dim: var(--ink-dim); --rule: color-mix(in oklab, var(--ink-fg) 14%, transparent); }
+    .post-head { margin-bottom: 48px; }
+    .post-eyebrow { color: var(--dim); }
+    .post-eyebrow a { text-decoration: none; } .post-eyebrow a:hover { color: var(--accent); }
+    .post h1 { font: 300 clamp(40px, 7vw, 76px)/1 var(--serif); letter-spacing: -.025em; margin: 16px 0 18px; font-variation-settings: 'opsz' 144; }
+    .post-project h1 { font: 600 clamp(36px, 6vw, 64px)/1 var(--mono); letter-spacing: -.04em; }
+    .post-lede { font: italic 300 21px/1.45 var(--serif); color: var(--dim); max-width: 46ch; margin-bottom: 18px; }
+    .post-meta { display: flex; gap: 18px; flex-wrap: wrap; color: var(--dim); font-size: 10px; }
+    .post-meta a { color: var(--accent); text-decoration: none; } .post-meta a:hover { text-decoration: underline; }
+    .post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+    .post-tags span { font: 400 11px var(--mono); border: 1px solid var(--rule); padding: 3px 8px; color: var(--dim); }
+
+    .verse { font: 300 23px/1.65 var(--serif); }
+    .verse p { margin-bottom: 1.3em; }
+    .prose { font: 300 19px/1.8 var(--serif); }
+    .prose > * + * { margin-top: 1.1em; }
+    .prose h2 { font: 400 30px/1.2 var(--serif); margin-top: 2em; }
+    .post-project .prose h2 { font: 600 22px/1.3 var(--mono); letter-spacing: -.02em; }
+    .prose h3 { font: 400 22px/1.3 var(--serif); margin-top: 1.6em; }
+    .prose a { color: var(--accent); }
+    .prose blockquote { border-left: 2px solid var(--accent); padding-left: 20px; font-style: italic; color: var(--dim); }
+    .prose ul, .prose ol { padding-left: 1.3em; }
+    .prose li + li { margin-top: .4em; }
+    .prose code { font: 400 .82em var(--mono); background: var(--rule); padding: 1px 5px; border-radius: 3px; }
+    .prose pre { font: 400 14px/1.6 var(--mono); padding: 18px 20px; overflow-x: auto; border-radius: 4px; border: 1px solid var(--rule); }
+    .prose pre code { background: none; padding: 0; font-size: inherit; }
+    .prose hr { border: 0; border-top: 1px solid var(--rule); margin: 2.4em 0; }
+    .prose img, .verse img, .prose video, .verse video { display: block; max-width: 100%; height: auto; margin: 2rem auto; }
+    .prose figure, .verse figure { margin: 2.4rem 0; }
+    .prose figure :is(img, video), .verse figure :is(img, video) { margin: 0; }
+    .prose figcaption, .verse figcaption { margin-top: .6rem; font: 400 12px/1.5 var(--mono); color: var(--dim); }
+    .verse video { max-height: 80vh; }
+    .media-embed { position: relative; aspect-ratio: 16 / 9; margin: 2rem 0; }
+    .media-embed--portrait { aspect-ratio: 9 / 16; max-width: 400px; margin-inline: auto; }
+    .media-embed iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+    .post-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--rule); }
+    .pn { display: flex; flex-direction: column; gap: 4px; text-decoration: none; font: 400 20px/1.3 var(--serif); }
+    .pn .mono { color: var(--dim); font-size: 10px; }
+    .pn:hover { color: var(--accent); }
+    .pn.next { text-align: right; }
+  </style>
+</Layout>

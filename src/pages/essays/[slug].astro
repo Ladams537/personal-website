@@ -1,27 +1,16 @@
 ---
-import PostLayout from '../../layouts/PostLayout.astro';
 import { getCollection } from 'astro:content';
+import Post from '../../components/Post.astro';
 
 export async function getStaticPaths() {
-  const essays = await getCollection('essays');
-  return essays.map(essay => ({
-    params: { slug: essay.slug },
-    props: { essay },
-  }));
+  const entries = (await getCollection('essays')).sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+  const link = (e?: (typeof entries)[number]) => (e ? { href: `/essays/${e.slug}/`, title: e.data.title } : null);
+  return entries.map((entry, i) => ({ params: { slug: entry.slug }, props: { entry, prev: link(entries[i - 1]), next: link(entries[i + 1]) } }));
 }
-
-const { essay } = Astro.props;
-const { Content } = await essay.render();
-const readingTime = Math.max(1, Math.ceil((essay.body?.split(/\s+/).length ?? 0) / 200));
+const { entry, prev, next } = Astro.props;
+const { Content } = await entry.render();
+const data = entry.data as { title: string; date: Date; tags?: string[]; excerpt?: string; subtitle?: string };
 ---
-
-<PostLayout
-  title={essay.data.title}
-  date={essay.data.date}
-  tags={essay.data.tags}
-  type="essays"
-  description={essay.data.excerpt}
-  readingTime={readingTime}
->
+<Post kind="essay" title={data.title} date={data.date} lede={data.excerpt ?? data.subtitle} tags={data.tags} prev={prev} next={next} body={entry.body}>
   <Content />
-</PostLayout>
+</Post>

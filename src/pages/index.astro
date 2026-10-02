@@ -1,22 +1,228 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+// Home: the Seam. Builder on the ink ground, poet on the paper ground, the accent is the thread.
+// Below the fold the seam carries on as stitches, ending in a teaser for the Almanac.
 import { getCollection } from 'astro:content';
+import Layout from '../components/Layout.astro';
+import Spiral from '../components/Spiral.astro';
+import { getArchive, firstStanza } from '../components/content';
+
+const archive = await getArchive();
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const featured = projects.filter(project => project.data.featured);
-const experiments = projects.filter(project => !project.data.featured);
-const writing = (await Promise.all(['poetry', 'reflections', 'essays'].map(async type => (await getCollection(type as 'poetry' | 'reflections' | 'essays')).map(entry => ({ ...entry, type }))))).flat().sort((a,b) => b.data.date.valueOf()-a.data.date.valueOf()).slice(0,3);
+const featured = projects.filter(p => p.data.featured);
+const stack = [...new Set(projects.flatMap(p => p.data.technologies))];
+const writing = archive.filter(i => i.k !== 'project' && i.date).reverse();
+const poems = writing.filter(i => i.k === 'poem').slice(0, 6);
+const latestOther = (['reflection', 'essay'] as const).map(k => writing.find(i => i.k === k)!).filter(Boolean);
+// The pull quote is the opening of the newest poem; the deep layer is that poem in full.
+const poemEntries = (await getCollection('poetry')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const lead = poemEntries[0];
+const { Content: LeadPoem } = await lead.render();
+const quote = firstStanza(lead, 3);
+const numerals = ['i', 'ii', 'iii', 'iv', 'v', 'vi'];
+const thisYear = archive.filter(i => i.year === new Date().getFullYear()).length;
 ---
-<BaseLayout title="Louis Adams — Builder & poet">
-  <section class="intro">
-    <p class="eyebrow">Louis Adams / Portfolio</p>
-    <h1>Building things.<br /><em>Finding the words.</em></h1>
-    <div class="intro-bottom"><p>I'm Louis, a builder and poet. This is a home for the things I make, the ideas I follow, and the words I write along the way.</p><a href="mailto:louistadams3@gmail.com" class="text-link">Get in touch ↗</a></div>
+<Layout title="Louis Adams — Builder & poet" ground="split" page="home" description="Louis Adams, a builder and poet. A home for the things I make, the ideas I follow, and the words I write along the way.">
+  <main class="stage">
+    <section class="side build" aria-label="Builder">
+      <div class="inner">
+        <p class="tag">~/louis <span class="blink">▍</span></p>
+        <h1>Building<br />things.</h1>
+        <p class="lede">I'm Louis, a builder and poet. This is a home for the things I make, the ideas I follow, and the words I write along the way.</p>
+        <ol class="proj">
+          {featured.map((p, i) => (
+            <li><a href={`/projects/${p.slug}/`}><span class="n">{String(i + 1).padStart(2, '0')}</span><span class="t">{p.data.title}</span><span class="s">{p.data.status}</span><span class="d">{p.data.category}</span></a></li>
+          ))}
+        </ol>
+        <div class="deep">
+          <p class="deep-h">$ ls ~/projects</p>
+          <ul class="log">{projects.map(p => <li><a href={`/projects/${p.slug}/`}><span>{p.slug}/</span>{p.data.summary}</a></li>)}</ul>
+          <p class="deep-h">$ cat stack.txt</p>
+          <p class="chips">{stack.map(t => <span>{t}</span>)}</p>
+        </div>
+      </div>
+      <button class="spine" data-to="45" aria-label="Bring the builder back"><span>← the builder</span></button>
+    </section>
+
+    <section class="side write" aria-label="Poet">
+      <div class="inner">
+        <p class="tag">— the other hand</p>
+        <h1><em>Finding</em><br /><em>the words.</em></h1>
+        <blockquote>
+          {quote.map((l, i) => <>{l}{i < quote.length - 1 && <br />}</>)}
+          <a href={`/poetry/${lead.slug}/`} class="cite">— {lead.data.title}</a>
+        </blockquote>
+        <ul class="poems">
+          {poems.map((p, i) => <li><a href={p.href}><span>{p.t}{p.recorded && <b class="rec" title="Has a recording">●</b>}</span><i>{numerals[i]}</i></a></li>)}
+        </ul>
+        <ul class="also">
+          {latestOther.map(o => <li><a href={o.href}><span class="mono">latest {o.k}</span> {o.t}</a></li>)}
+          <li><a href="/archive/"><span class="mono">everything</span> the full index →</a></li>
+        </ul>
+        <div class="deep">
+          <p class="deep-h">{lead.data.title}, in full</p>
+          <div class="full"><LeadPoem /></div>
+        </div>
+      </div>
+      <button class="spine" data-to="55" aria-label="Bring the poet back"><span>the poet →</span></button>
+    </section>
+
+    <button class="seam" aria-label="Drag to rebalance builder and poet" role="slider" aria-valuemin="15" aria-valuemax="85" aria-valuenow="50">
+      <span class="grip"></span>
+      <span class="hint">drag · double-click to centre</span>
+    </button>
+  </main>
+
+  <section class="meet" aria-label="Where building and writing meet">
+    <p class="meet-h"><span class="l">where they</span><span class="r">meet</span></p>
+    {featured.map(p => (
+      <a href={`/projects/${p.slug}/`} class="stitch">
+        <div class="st-l"><code>{p.slug}</code><span>{p.data.technologies.slice(0, 3).join(' · ')}</span></div>
+        <div class="st-r"><p>{p.data.visualLabel.join(' ').toLowerCase()}.</p></div>
+      </a>
+    ))}
+    <a href="/almanac/" class="stitch teaser">
+      <div class="st-l"><div class="mini"><Spiral items={archive} mini /></div></div>
+      <div class="st-r">
+        <p class="t-k">The Almanac</p>
+        <p class="t-h">Every piece of work, on the day it went out.</p>
+        <p class="t-s">{thisYear} pieces so far this year · open it →</p>
+      </div>
+    </a>
   </section>
-  <section id="work" class="portfolio-section">
-    <div class="section-heading"><h2>Selected work</h2><span class="eyebrow">{String(featured.length).padStart(2, '0')} projects</span></div>
-    <div class="project-list">{featured.map(project => <ProjectCard project={project} />)}</div>
-  </section>
-  {experiments.length > 0 && <section class="portfolio-section"><div class="section-heading"><h2>Small experiments</h2><a href="/work/" class="text-link">All work →</a></div><ul class="experiment-list">{experiments.map(project => <li><a href={`/projects/${project.slug}/`}><p class="eyebrow">{project.data.category}</p><h3>{project.data.title} ↗</h3><p>{project.data.summary}</p></a></li>)}</ul></section>}
-  <section class="portfolio-section writing-section"><div class="section-heading"><h2>On the page</h2><a href="/writing/" class="text-link">All writing →</a></div><p class="section-description">Poetry, reflections, and essays. Another way of making sense of things.</p><ul class="writing-list">{writing.map(entry => <li><a href={`/${entry.type}/${entry.slug}/`}><span class="eyebrow">{entry.type}</span><h3>{entry.data.title}</h3><span aria-hidden="true">↗</span></a></li>)}</ul></section>
-</BaseLayout>
+
+  <script>
+    const root = document.documentElement;
+    const stage = document.querySelector<HTMLElement>('.stage')!;
+    const seam = document.querySelector<HTMLElement>('.seam')!;
+    const stacked = () => matchMedia('(max-width: 760px)').matches;
+    let dragging = false;
+    const set = (pct: number) => {
+      pct = Math.max(15, Math.min(85, pct));
+      root.style.setProperty('--split', pct + '%');
+      seam.setAttribute('aria-valuenow', String(Math.round(pct)));
+      // Past two-thirds the wide side opens its deeper layer and the narrow side folds to a spine.
+      document.body.dataset.deep = stacked() ? '' : pct <= 33 ? 'write' : pct >= 67 ? 'build' : '';
+      try { localStorage.setItem('seam', String(pct)); } catch {}
+    };
+    let saved = 50;
+    try { saved = parseFloat(localStorage.getItem('seam') ?? '50') || 50; } catch {}
+    set(saved);
+
+    seam.addEventListener('pointerdown', e => { dragging = true; touched = true; seam.setPointerCapture(e.pointerId); stage.classList.add('dragging'); });
+    seam.addEventListener('pointerup', () => { dragging = false; stage.classList.remove('dragging'); });
+    seam.addEventListener('pointermove', e => { if (dragging) set(((e.clientX - stage.getBoundingClientRect().left) / stage.clientWidth) * 100); });
+    seam.addEventListener('dblclick', () => set(50));
+    seam.addEventListener('keydown', e => {
+      const cur = parseFloat(root.style.getPropertyValue('--split'));
+      if (e.key === 'ArrowLeft') set(cur - 5);
+      if (e.key === 'ArrowRight') set(cur + 5);
+    });
+    document.querySelectorAll<HTMLButtonElement>('.spine').forEach(b => b.addEventListener('click', () => set(+b.dataset.to!)));
+    // Until someone drags, hovering a side leans gently toward it.
+    let touched = saved !== 50;
+    document.querySelectorAll<HTMLElement>('.side').forEach(side => side.addEventListener('mouseenter', () => {
+      if (!touched && !stacked()) set(side.classList.contains('build') ? 54 : 46);
+    }));
+  </script>
+
+  <style is:global>
+    :root { --split: 50%; }
+    .stage { position: relative; display: grid; grid-template-columns: var(--split) 1fr; min-height: 100vh; transition: grid-template-columns .6s cubic-bezier(.2,.8,.2,1); }
+    .stage.dragging, .stage.dragging .seam { transition: none; }
+    .side { position: relative; overflow: hidden; min-width: 0; }
+    .inner { padding: 110px clamp(28px, 6vw, 88px) 80px; max-width: 640px; transition: opacity .4s; }
+
+    .build { background: var(--ink); color: var(--ink-fg); font-family: var(--mono); }
+    .build::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, color-mix(in oklab, var(--ink-fg) 3.5%, transparent) 0 1px, transparent 1px 3px); }
+    .build .inner { margin-left: auto; }
+    .tag { font: 400 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 40px; }
+    .blink { animation: blink 1s steps(1) infinite; color: var(--accent); }
+    @keyframes blink { 50% { opacity: 0; } }
+    .build h1 { font: 600 clamp(36px, 5vw, 72px)/.98 var(--mono); letter-spacing: -.04em; margin-bottom: 26px; }
+    .lede { font-size: 14px; line-height: 1.7; color: var(--ink-dim); max-width: 40ch; margin-bottom: 44px; }
+    .proj { list-style: none; border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .proj a { display: grid; grid-template-columns: 34px 1fr auto; gap: 4px 12px; padding: 16px 0; text-decoration: none; border-bottom: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); font-size: 14px; transition: padding .3s, background .3s; }
+    .proj a:hover { padding-left: 10px; background: color-mix(in oklab, var(--ink-fg) 5%, transparent); }
+    .proj .n { color: var(--ink-dim); }
+    .proj .d { grid-column: 2 / -1; font-size: 12px; color: var(--ink-dim); }
+    .s { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); text-align: right; max-width: 18ch; line-height: 1.4; align-self: start; padding-top: 2px; }
+
+    .write { background: var(--paper); color: var(--paper-fg); }
+    .write .tag { font: italic 300 15px var(--serif); text-transform: none; letter-spacing: 0; color: var(--paper-dim); }
+    .write h1 { font: 300 clamp(40px, 6vw, 90px)/.95 var(--serif); letter-spacing: -.02em; margin-bottom: 36px; font-variation-settings: 'opsz' 144; }
+    blockquote { font: italic 300 20px/1.55 var(--serif); border-left: 2px solid var(--accent); padding-left: 20px; margin-bottom: 44px; color: var(--paper-dim); }
+    .poems { list-style: none; }
+    .poems a { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; font-size: 22px; text-decoration: none; border-bottom: 1px dotted color-mix(in oklab, var(--paper-fg) 30%, transparent); }
+    .poems a span { background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat; transition: background-size .4s; }
+    .poems a:hover span { background-size: 100% 1px; }
+    .poems i { font-size: 14px; color: var(--accent); }
+    .rec { font-size: 9px; color: var(--accent); margin-left: 8px; vertical-align: middle; font-weight: 400; }
+    .cite { display: block; margin-top: 8px; font-size: 15px; color: var(--accent); text-decoration: none; }
+    .cite:hover { text-decoration: underline; }
+    .also { list-style: none; margin-top: 28px; }
+    .also a { display: block; padding: 6px 0; font-size: 17px; text-decoration: none; }
+    .also a:hover { color: var(--accent); }
+    .also .mono { display: inline-block; width: 140px; font-size: 10px; color: var(--paper-dim); }
+
+    .deep { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .5s ease, opacity .3s, margin .5s; }
+    body[data-deep='build'] .build .deep, body[data-deep='write'] .write .deep { max-height: 2400px; opacity: 1; margin-top: 48px; transition: max-height .8s ease, opacity .5s .2s, margin .6s; }
+    .deep-h { font: 400 12px var(--mono); color: var(--ink-dim); margin-bottom: 12px; }
+    .log { list-style: none; font-size: 13px; margin-bottom: 28px; }
+    .log li { border-bottom: 1px dashed color-mix(in oklab, var(--ink-fg) 12%, transparent); }
+    .log a { display: block; padding: 8px 0; text-decoration: none; color: var(--ink-dim); line-height: 1.5; }
+    .log a:hover { color: var(--ink-fg); }
+    .log span { display: block; color: var(--k-reflection); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips span { font-size: 12px; border: 1px solid color-mix(in oklab, var(--ink-fg) 30%, transparent); padding: 4px 8px; }
+    .write .deep-h { font: italic 300 15px var(--serif); color: var(--paper-dim); }
+    .full { position: relative; font: 300 22px/1.6 var(--serif); }
+    .full p { margin-bottom: 1.2em; }
+    .full video, .full img { display: block; max-width: 100%; height: auto; margin: 1.5rem 0; }
+    .full figcaption { font: 12px var(--mono); color: var(--paper-dim); }
+    .spine { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: none; border: 0; cursor: pointer; z-index: 2; }
+    .spine span { writing-mode: vertical-rl; }
+    .build .spine { color: var(--ink-fg); font: 400 12px var(--mono); letter-spacing: .3em; text-transform: uppercase; }
+    .write .spine { color: var(--accent); font: italic 300 22px var(--serif); }
+    body[data-deep='write'] .build .spine, body[data-deep='build'] .write .spine { display: flex; }
+    body[data-deep='write'] .build .inner, body[data-deep='build'] .write .inner { opacity: 0; pointer-events: none; }
+
+    .seam { position: absolute; top: 0; bottom: 0; left: var(--split); width: 28px; transform: translateX(-50%); background: none; border: 0; cursor: col-resize; z-index: 5; transition: left .6s cubic-bezier(.2,.8,.2,1); touch-action: none; }
+    .seam::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--accent); }
+    .grip { position: sticky; top: 50vh; display: block; width: 28px; height: 56px; margin-top: 45vh; border-radius: 14px; background: var(--accent);
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 25%, transparent); transition: transform .2s; }
+    .seam:hover .grip, .seam:focus-visible .grip { transform: scale(1.1); }
+    .hint { position: sticky; top: calc(50vh + 70px); display: block; font: 10px var(--mono); color: var(--accent); text-transform: uppercase; letter-spacing: .15em; writing-mode: vertical-rl; margin: 14px auto 0; }
+
+    .meet { position: relative; background: linear-gradient(90deg, var(--ink) var(--split), var(--paper) var(--split)); padding: 80px 0 140px; }
+    .meet::before { content: ''; position: absolute; top: 0; bottom: 0; left: var(--split); border-left: 2px dashed var(--accent); transform: translateX(-1px); }
+    .meet-h { display: grid; grid-template-columns: var(--split) 1fr; margin-bottom: 40px; font-size: clamp(28px, 4vw, 48px); }
+    .meet-h .l { text-align: right; padding-right: 24px; font: 600 1em var(--mono); color: var(--ink-fg); letter-spacing: -.03em; }
+    .meet-h .r { padding-left: 24px; font: italic 300 1.15em var(--serif); color: var(--paper-fg); }
+    .stitch { position: relative; display: grid; grid-template-columns: var(--split) 1fr; align-items: center; padding: 22px 0; text-decoration: none; }
+    .stitch::after { content: ''; position: absolute; left: var(--split); top: 50%; width: 60px; height: 2px; transform: translate(-50%, -50%);
+      background: repeating-linear-gradient(90deg, var(--accent) 0 8px, transparent 8px 14px); }
+    .st-l { text-align: right; padding-right: 48px; font-family: var(--mono); color: var(--ink-fg); }
+    .st-l code { display: block; font-size: 18px; }
+    .st-l span { font-size: 12px; color: var(--ink-dim); }
+    .st-r { padding-left: 48px; font: italic 300 22px/1.35 var(--serif); color: var(--paper-fg); max-width: 36ch; }
+    .stitch:hover .st-l code { text-decoration: underline; text-decoration-color: var(--accent); }
+    .teaser { margin-top: 40px; }
+    .teaser .st-l { display: flex; justify-content: flex-end; }
+    .mini { width: min(280px, 100%); transition: transform .5s; }
+    .teaser:hover .mini { transform: rotate(-8deg); }
+    .t-k { font: 400 11px var(--mono); text-transform: uppercase; letter-spacing: .14em; color: var(--accent); font-style: normal; }
+    .t-h { font: 300 32px/1.1 var(--serif); font-style: normal; margin: 8px 0; }
+    .t-s { font-size: 16px; color: var(--paper-dim); }
+
+    @media (max-width: 760px) {
+      .stage { grid-template-columns: 1fr; } .seam { display: none; } .build .inner { margin: 0; } .write .inner { padding-top: 60px; }
+      .meet { background: var(--ink); } .meet::before, .stitch::after { display: none; }
+      .meet-h, .stitch { grid-template-columns: 1fr; padding: 16px; } .st-l { text-align: left; padding: 0; } .st-r { padding: 8px 0 0; color: var(--ink-fg); }
+      .meet-h .l, .meet-h .r { text-align: left; padding: 0; } .meet-h .r { color: var(--ink-fg); }
+      .teaser .st-l { justify-content: flex-start; } .t-s { color: var(--ink-dim); }
+      .site-nav[data-ground='split'] .site-links { color: var(--ink-fg); }
+    }
+    @media (prefers-reduced-motion: reduce) { .stage, .seam, .deep { transition: none; } .blink { animation: none; } }
+  </style>
+</Layout>
