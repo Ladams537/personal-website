@@ -140,6 +140,7 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
     .row.sel .rec { color: var(--accent-ink); }
     .row .t::after { content: ''; position: absolute; inset: 0; }
     .row { position: relative; }
+    .row[hidden] { display: none; }
     .kind { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; display: flex; align-items: center; gap: 7px; color: var(--paper-dim); }
     .kind::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: color-mix(in oklab, var(--c) 70%, var(--paper-fg)); }
     .arrow { font: 13px var(--mono); opacity: 0; color: var(--accent); }
