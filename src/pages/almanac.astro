@@ -1,0 +1,199 @@
+---
+// The tracker. Lives on the builder's (ink) ground. Spiral is the overview; clicking a year
+// zooms into that year's dial (#year-2025). Both views share the centre readout.
+import Layout from '../components/Layout.astro';
+import Spiral from '../components/Spiral.astro';
+import YearDial from '../components/YearDial.astro';
+import { getArchive, dated, yearsOf, months, type Kind } from '../components/content';
+
+const archive = await getArchive();
+const items = dated(archive);
+const years = yearsOf(archive);
+// Only kinds that actually have dated work get a legend entry (undated projects stay in the Index).
+const kinds = (['poem', 'reflection', 'essay', 'project'] as Kind[]).filter(k => items.some(i => i.k === k));
+const label = { poem: 'Poems', reflection: 'Reflections', project: 'Releases', essay: 'Essays' };
+const recorded = items.filter(i => i.recorded).length;
+const absWeek = (y: number, w: number) => (y - years[0]) * 52 + w;
+const active = new Set(items.map(i => absWeek(i.year, i.week)));
+const runs: { from: number; to: number }[] = [];
+for (let a = 0; a < years.length * 52; a++) {
+  if (!active.has(a)) continue;
+  const last = runs[runs.length - 1];
+  if (last && last.to === a - 1) last.to = a; else runs.push({ from: a, to: a });
+}
+const longest = runs.sort((a, b) => (b.to - b.from) - (a.to - a.from))[0];
+const facts = Object.fromEntries(years.map(y => {
+  const list = items.filter(i => i.year === y);
+  const perMonth = months.map((_, m) => list.filter(i => +i.date!.slice(5, 7) === m + 1).length);
+  const peak = perMonth.indexOf(Math.max(...perMonth));
+  return [y, { total: list.length, poems: list.filter(i => i.k === 'poem').length, peak: `${months[peak]} · ${perMonth[peak]}` }];
+}));
+---
+<Layout title="Almanac — Louis Adams" ground="ink" page="almanac">
+  <main class="alm">
+    <header class="alm-head">
+      <p class="mono dim">The Almanac</p>
+      <h1>When the work <em>happened.</em></h1>
+      <p class="lede">Every poem, weekly reflection and essay, placed on the day it went out. Busy weeks pile up. Quiet months stay quiet.</p>
+    </header>
+
+    <div class="alm-controls">
+      <nav class="modes">
+        <a href="#spiral" data-mode="spiral">All years</a>
+        {years.map(y => <a href={`#year-${y}`} data-mode={`year-${y}`}>{y}</a>)}
+      </nav>
+      <div class="legend">
+        {kinds.map(k => <button data-k={k} class="on"><i style={`--c: var(--k-${k})`}></i>{label[k]}</button>)}
+        {recorded > 0 && <span class="rec-key"><i></i>recorded</span>}
+      </div>
+    </div>
+
+    <figure class="stage">
+      <div class="view view-spiral"><Spiral items={archive} /></div>
+      <div class="view view-year"><YearDial items={archive} /></div>
+      <div class="readout" aria-live="polite">
+        <p class="mono" id="ck"></p>
+        <p class="rt" id="ct"></p>
+        <p class="mono dim" id="cd"></p>
+      </div>
+    </figure>
+
+    <div class="under">
+      <button id="replay" class="pill">▶ Replay</button>
+      <p class="hint mono dim" id="hint">Hover a month to compare years · click a year to zoom in · click a dot to read it</p>
+    </div>
+
+    <section class="facts">
+      <div><p class="mono dim">Everything</p><b>{items.length}</b><span>pieces since {years[0]}</span></div>
+      <div><p class="mono dim">Longest run</p><b>{longest.to - longest.from + 1} weeks</b><span>without missing one</span></div>
+      {years.map(y => <div class="yf" data-y={y}><p class="mono dim">{y}</p><b>{facts[y].total}</b><span>busiest: {facts[y].peak}</span></div>)}
+    </section>
+  </main>
+
+  <script>
+    import { fmt } from '../components/format';
+    const spiral = document.querySelector<SVGSVGElement>('.spiral')!;
+    const dial = document.querySelector<SVGSVGElement>('.yeardial')!;
+    const ck = document.querySelector('#ck')!, ct = document.querySelector('#ct')!, cd = document.querySelector('#cd')!;
+    const years = [...document.querySelectorAll<SVGGElement>('.yr')].map(g => +g.dataset.y!);
+    const names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    let readDefault: [string, string, string] = ['', '', ''];
+    const say = (a: string, b: string, c: string) => { ck.textContent = a; ct.textContent = b; cd.textContent = c; };
+    const reset = () => say(...readDefault);
+
+    function route() {
+      const m = location.hash.match(/^#year-(\d{4})$/);
+      const y = m && years.includes(+m[1]) ? +m[1] : null;
+      document.body.dataset.view = y ? 'year' : 'spiral';
+      document.querySelectorAll<HTMLAnchorElement>('.modes a').forEach(a => a.classList.toggle('on', a.dataset.mode === (y ? `year-${y}` : 'spiral')));
+      document.querySelectorAll<HTMLElement>('.yf').forEach(f => f.classList.toggle('on', +f.dataset.y! === y));
+      document.querySelector('#hint')!.textContent = y ? '← → step through years · click a dot to read it' : 'Hover a month to compare years · click a year to zoom in · click a dot to read it';
+      if (y) {
+        dial.querySelectorAll<SVGElement>('.yr').forEach(g => g.classList.toggle('on', +g.dataset.y! === y));
+        dial.querySelectorAll<SVGElement>('.env').forEach(p => { p.classList.toggle('cur', +p.dataset.y! === y); p.classList.toggle('prev', +p.dataset.y! === y - 1); });
+        const hand = dial.querySelector<SVGGElement>('.hand')!;
+        const isNow = y === new Date().getFullYear();
+        hand.style.display = isNow ? '' : 'none';
+        if (isNow) requestAnimationFrame(() => (hand.style.transform = `rotate(${((Date.now() - new Date(y, 0, 1).getTime()) / 864e5 / 365) * 360}deg)`));
+        const n = dial.querySelectorAll(`.yr[data-y='${y}'] .mark`).length;
+        readDefault = [String(y), `${n} pieces`, y > years[0] ? 'dashed line: the year before' : ''];
+      } else {
+        readDefault = [`${years[0]}–${years[years.length - 1]}`, `${spiral.querySelectorAll('.mark').length} pieces`, 'one thread, oldest at the centre'];
+      }
+      reset();
+    }
+    addEventListener('hashchange', route);
+    addEventListener('keydown', e => {
+      if (document.body.dataset.view !== 'year') return;
+      const y = +location.hash.slice(6), i = years.indexOf(y);
+      if (e.key === 'ArrowLeft' && i > 0) location.hash = `year-${years[i - 1]}`;
+      if (e.key === 'ArrowRight' && i < years.length - 1) location.hash = `year-${years[i + 1]}`;
+    });
+
+    document.querySelectorAll<SVGAElement>('.mark-link').forEach(a => {
+      const m = a.querySelector<SVGCircleElement>('.mark')!;
+      const on = () => say(m.dataset.k! + (m.dataset.rec ? ' · recorded' : ''), m.dataset.t!, fmt(m.dataset.d!));
+      a.addEventListener('mouseenter', on); a.addEventListener('focus', on);
+      a.addEventListener('mouseleave', reset); a.addEventListener('blur', reset);
+    });
+
+    const sMarks = [...spiral.querySelectorAll<SVGCircleElement>('.mark')];
+    const spot = (pred: (m: SVGCircleElement) => boolean) => { spiral.classList.add('spot'); sMarks.forEach(m => m.classList.toggle('lit', pred(m))); };
+    const unspot = () => { spiral.classList.remove('spot'); sMarks.forEach(m => m.classList.remove('lit')); reset(); };
+    spiral.querySelectorAll<SVGGElement>('.month-g').forEach(g => {
+      g.addEventListener('mouseenter', () => {
+        const mo = g.dataset.m!; g.classList.add('lit'); spot(m => m.dataset.m === mo);
+        const counts = new Map(years.map(y => [y, 0]));
+        sMarks.filter(m => m.dataset.m === mo).forEach(m => counts.set(+m.dataset.d!.slice(0, 4), counts.get(+m.dataset.d!.slice(0, 4))! + 1));
+        say(names[+mo], [...counts].map(([y, n]) => `${y}: ${n}`).join(' · '), 'pieces per year');
+      });
+      g.addEventListener('mouseleave', () => { g.classList.remove('lit'); unspot(); });
+    });
+    spiral.querySelectorAll<SVGAElement>('.yl-link').forEach(a => {
+      const y = a.dataset.y!;
+      const on = () => { spot(m => m.dataset.d!.startsWith(y)); say(y, `${sMarks.filter(m => m.dataset.d!.startsWith(y)).length} pieces`, 'click to zoom in →'); };
+      a.addEventListener('mouseenter', on); a.addEventListener('focus', on);
+      a.addEventListener('mouseleave', unspot); a.addEventListener('blur', unspot);
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('.legend button').forEach(b => b.addEventListener('click', () => {
+      b.classList.toggle('on');
+      [spiral, dial].forEach(s => s.classList.toggle(`hide-${b.dataset.k}`, !b.classList.contains('on')));
+    }));
+    document.querySelector('#replay')!.addEventListener('click', () => {
+      if (location.hash) location.hash = 'spiral';
+      spiral.classList.remove('replaying'); void spiral.getBoundingClientRect(); spiral.classList.add('replaying');
+      const max = Math.max(...sMarks.map(m => +m.dataset.tt!));
+      sMarks.forEach(m => m.style.setProperty('--at', `${(+m.dataset.tt! / max) * 6}s`));
+    });
+    route();
+  </script>
+
+  <style is:global>
+    .alm { max-width: 1100px; margin: 0 auto; padding: 110px 16px 120px; }
+    .dim { color: var(--ink-dim); }
+    .alm-head { max-width: 640px; }
+    .alm-head h1 { font: 300 clamp(40px, 6vw, 76px)/1 var(--serif); letter-spacing: -.02em; margin: 14px 0 18px; font-variation-settings: 'opsz' 144; }
+    .alm-head h1 em { color: var(--accent); }
+    .lede { color: color-mix(in oklab, var(--ink-fg) 80%, transparent); max-width: 52ch; }
+
+    .alm-controls { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin: 40px 0 8px; padding: 12px 0; border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .modes { display: flex; gap: 4px; }
+    .modes a, .legend button, .pill { font: 400 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--ink-dim);
+      background: none; border: 1px solid transparent; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+    .modes a:hover { color: var(--ink-fg); }
+    .modes a.on { color: var(--ink); background: var(--ink-fg); }
+    .legend { display: flex; gap: 4px; flex-wrap: wrap; }
+    .legend button { display: flex; align-items: center; gap: 8px; border-color: color-mix(in oklab, var(--ink-fg) 12%, transparent); }
+    .legend button.on { color: var(--ink-fg); }
+    .legend i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+    .legend button:not(.on) i { opacity: .25; }
+    .rec-key { display: flex; align-items: center; gap: 8px; font: 400 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-dim); padding: 6px 8px; }
+    .rec-key i { width: 9px; height: 9px; border-radius: 50%; border: 1.6px solid var(--accent-ink); }
+
+    .stage { position: relative; width: min(760px, 100%); margin: 0 auto; }
+    .view { transition: opacity .5s, transform .6s cubic-bezier(.2,.8,.2,1); }
+    .view-year { position: absolute; inset: 0; }
+    body[data-view='spiral'] .view-year { opacity: 0; transform: scale(1.15); pointer-events: none; }
+    body[data-view='year'] .view-spiral { opacity: 0; transform: scale(.85); pointer-events: none; }
+    .readout { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 34%; text-align: center; pointer-events: none; }
+    .readout .mono:first-child { color: var(--accent); }
+    .rt { font: 400 clamp(18px, 3vw, 30px)/1.1 var(--serif); margin: 8px 0; }
+
+    .under { display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+    .pill { border-color: color-mix(in oklab, var(--ink-fg) 20%, transparent); color: var(--ink-fg); }
+    .pill:hover { border-color: var(--accent); color: var(--accent); }
+    .hint { font-size: 10px; }
+
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px; margin-top: 56px; padding-top: 24px; border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .facts b { display: block; font: 300 40px/1.1 var(--serif); margin: 6px 0 2px; }
+    .facts span { font-size: 15px; color: var(--ink-dim); }
+    .yf { transition: opacity .3s; }
+    body[data-view='year'] .yf:not(.on) { opacity: .35; }
+    .yf.on b { color: var(--accent); }
+    @media (max-width: 700px) {
+      .spiral .month, .yeardial .month { font-size: 15px; }
+      .readout { position: static; transform: none; width: auto; margin-top: 4px; }
+    }
+  </style>
+</Layout>

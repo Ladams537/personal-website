@@ -1,0 +1,12 @@
+/* Lough Shore — peat water, reeds and bracken. The site's only palette.
+   ink-*   the builder's ground (dark side of the seam, the Almanac, project pages)
+   paper-* the poet's ground (light side of the seam, the Index, writing pages)
+   accent  the thread that joins them. One hue, two values so it reads (≥ 4.5:1) on both grounds.
+   k-*     one colour per kind of work, tuned for the ink ground (all ≥ 3:1). */
+:root {
+  --ink: #13211f; --ink-fg: #d3e3d8; --ink-dim: #7b9888;
+  --paper: #ece6d8; --paper-fg: #1d2825; --paper-dim: #5f645b;
+  --accent-paper: #a3461f; --accent-ink: #e3804f; --accent: var(--accent-paper);
+  --k-poem: #9cc4d8; --k-reflection: #dcb85a; --k-project: #e27a4a; --k-essay: #a9c98b;
+  --serif: 'Fraunces', Georgia, serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+}

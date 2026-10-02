@@ -1,0 +1,73 @@
+---
+// Shared shell for the site: fonts, Lough Shore tokens and nav.
+// `ground` says which side of the seam a page belongs to: both (home), ink (Almanac, projects),
+// paper (Index, writing).
+import './tokens.css';
+interface Props { title: string; ground: 'split' | 'ink' | 'paper'; page?: 'home' | 'almanac' | 'index'; description?: string }
+const { title, ground, page, description = 'Louis Adams, a builder and poet. A home for the things I make, the ideas I follow, and the words I write along the way.' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const links = [
+  { href: '/', label: 'Home', id: 'home' },
+  { href: '/almanac/', label: 'Almanac', id: 'almanac' },
+  { href: '/archive/', label: 'Index', id: 'index' },
+  { href: 'mailto:louistadams3@gmail.com', label: 'Contact ↗', id: 'contact' },
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="alternate" type="application/rss+xml" title="Louis Adams" href="/rss.xml" />
+  <meta name="theme-color" content="#13211f" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet" />
+</head>
+<body data-ground={ground}>
+  <nav class="site-nav" data-ground={ground}>
+    <a href="/" class="site-name"><span class="nm">louis</span><span class="ns">Adams</span></a>
+    <div class="site-links">
+      {links.map(l => <a href={l.href} class:list={[{ on: l.id === page }]}>{l.label}</a>)}
+    </div>
+  </nav>
+
+  <slot />
+
+
+  <style is:global>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+    body { font: 300 18px/1.6 var(--serif); min-height: 100vh; transition: background-color .4s, color .4s; }
+    body[data-ground='ink'] { background: var(--ink); color: var(--ink-fg); }
+    body[data-ground='paper'] { background: var(--paper); color: var(--paper-fg); }
+    body[data-ground='split'] { background: var(--ink); }
+    a { color: inherit; }
+    /* Anything sitting on the ink ground swaps to the ink-legible accent. */
+    body[data-ground='ink'], .build, .st-l, .row.sel, .pv-art, .palette li.on { --accent: var(--accent-ink); }
+    .mono { font: 400 11px var(--mono); text-transform: uppercase; letter-spacing: .14em; }
+
+    .site-nav { position: absolute; top: 0; left: 0; right: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(16px, 4vw, 48px); }
+    .site-name { text-decoration: none; display: flex; align-items: baseline; gap: 8px; }
+    .site-name .nm { font: 600 14px var(--mono); letter-spacing: .02em; }
+    .site-name .ns { font: italic 400 19px var(--serif); }
+    .site-links { display: flex; gap: 22px; }
+    .site-links a { font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: .12em; text-decoration: none; opacity: .65; padding-bottom: 3px; border-bottom: 1px solid transparent; }
+    .site-links a:hover { opacity: 1; }
+    .site-links a.on { opacity: 1; border-color: var(--accent); }
+    .site-nav[data-ground='split'] .site-name { color: var(--ink-fg); }
+    .site-nav[data-ground='split'] .site-links { color: var(--paper-fg); }
+    .site-nav[data-ground='ink'] { color: var(--ink-fg); }
+    .site-nav[data-ground='paper'] { color: var(--paper-fg); }
+
+    /* On phones the name already links home, so the Home link makes room for Contact. */
+    @media (max-width: 600px) { .site-links { gap: 14px; } .site-links a[href="/"] { display: none; } }
+  </style>
+</body>
+</html>

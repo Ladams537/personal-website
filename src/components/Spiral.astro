@@ -1,0 +1,80 @@
+---
+// Every year on one continuous spiral; angle = time of year, radius = time elapsed.
+// Render-only: interactivity lives on the page so the home teaser can stay static.
+import { stacks, yearsOf, months, type Item } from './content';
+interface Props { items: Item[]; mini?: boolean }
+const { items, mini = false } = Astro.props;
+const years = yearsOf(items);
+
+const R0 = 92, GAP = 78, STEP = 7, DOT = mini ? 3.6 : 3.1;
+const y0 = years[0];
+const now = new Date();
+const tNow = now.getFullYear() - y0 + (now.getMonth() * 30.4 + now.getDate()) / 365;
+const ang = (t: number) => (t % 1) * 2 * Math.PI - Math.PI / 2;
+const rad = (t: number) => R0 + GAP * t;
+const pt = (t: number, r = rad(t)) => [r * Math.cos(ang(t)), r * Math.sin(ang(t))];
+const spiral = Array.from({ length: Math.ceil(tNow * 240) + 1 }, (_, i) => {
+  const [x, y] = pt(Math.min(i / 240, tNow));
+  return `${i ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`;
+}).join('');
+const OUT = rad(tNow) + GAP;
+const sector = (r1: number, r2: number, a1: number, a2: number) => {
+  const p = (r: number, a: number) => `${(r * Math.cos(a)).toFixed(1)},${(r * Math.sin(a)).toFixed(1)}`;
+  return `M${p(r1, a1)} L${p(r2, a1)} A${r2},${r2} 0 0 1 ${p(r2, a2)} L${p(r1, a2)} A${r1},${r1} 0 0 0 ${p(r1, a1)}Z`;
+};
+const [nx, ny] = pt(tNow);
+---
+<svg class:list={['spiral', { mini }]} viewBox={`${-OUT - 30} ${-OUT - 30} ${2 * OUT + 60} ${2 * OUT + 60}`} role="img" aria-label="Published work on a spiral across years">
+  {months.map((m, i) => {
+    const a = (i / 12) * 2 * Math.PI - Math.PI / 2, mid = ((i + 0.5) / 12) * 2 * Math.PI - Math.PI / 2;
+    return <g class="month-g" data-m={i}>
+      {!mini && <path d={sector(R0 - 20, OUT, a, a + Math.PI / 6)} class="wedge" />}
+      <line x1={(R0 - 20) * Math.cos(a)} y1={(R0 - 20) * Math.sin(a)} x2={OUT * Math.cos(a)} y2={OUT * Math.sin(a)} class="spoke" />
+      {!mini && <text x={(OUT + 14) * Math.cos(mid)} y={(OUT + 14) * Math.sin(mid)} class="month">{m}</text>}
+    </g>;
+  })}
+  <path d={spiral} class="thread" pathLength="1" />
+  {!mini && years.map(y => { const [x, yy] = pt(y - y0); return (
+    <a href={`#year-${y}`} class="yl-link" data-y={y} aria-label={`Open ${y} in the year view`}>
+      <rect x={x - 44} y={yy - 20} width="44" height="20" class="yl-hit" /><text x={x - 6} y={yy - 6} class="yl">{y}</text>
+    </a>); })}
+  {Array.from(stacks(items).values()).flatMap(stack => stack.map((it, i) => {
+    const t = it.year - y0 + (it.week + 0.5) / 52;
+    const [x, y] = pt(t, rad(t) + 5 + i * STEP + DOT);
+    const dot = <circle cx={x} cy={y} r={DOT} class:list={['mark', { rec: it.recorded }]} data-k={it.k} data-t={it.t} data-d={it.date} data-m={+it.date!.slice(5, 7) - 1} data-tt={t.toFixed(3)} data-rec={it.recorded ? '1' : undefined} style={`--c: var(--k-${it.k})`} />;
+    return mini ? dot : <a href={it.href} class="mark-link" aria-label={`${it.t}, ${it.date}`}>{dot}</a>;
+  }))}
+  <g class="now"><circle cx={nx} cy={ny} r="5" /><circle cx={nx} cy={ny} r="10" class="pulse" />{!mini && <text x={nx + 12} y={ny + 4}>now</text>}</g>
+</svg>
+
+<style is:global>
+  .spiral { width: 100%; height: auto; display: block; overflow: visible; }
+  .spiral .spoke { stroke: color-mix(in oklab, var(--ink-fg) 8%, transparent); }
+  .spiral .wedge { fill: transparent; cursor: crosshair; }
+  .spiral .month-g.lit .wedge { fill: color-mix(in oklab, var(--accent) 12%, transparent); }
+  .spiral .month { fill: var(--ink-dim); font: 400 11px var(--mono); text-anchor: middle; dominant-baseline: middle; text-transform: uppercase; letter-spacing: .1em; }
+  .spiral .month-g.lit .month { fill: var(--accent); }
+  .spiral .thread { fill: none; stroke: color-mix(in oklab, var(--ink-fg) 28%, transparent); stroke-width: 1; }
+  .spiral .yl { fill: var(--accent); font: 400 10px var(--mono); text-anchor: end; letter-spacing: .08em; }
+  .spiral .yl-hit { fill: transparent; }
+  .spiral .yl-link { cursor: pointer; outline: none; }
+  .spiral .yl-link:hover .yl, .spiral .yl-link:focus-visible .yl { font-size: 13px; text-decoration: underline; }
+  .spiral .mark { fill: var(--c); transition: opacity .3s, r .15s; outline: none; }
+  .spiral .mark.rec { stroke: var(--accent-ink); stroke-width: 1.6; paint-order: stroke; }
+  .spiral .mark-link { outline: none; }
+  .spiral .mark-link:focus-visible .mark { r: 7; }
+  .spiral:not(.mini) .mark { cursor: pointer; }
+  .spiral:not(.mini) .mark:hover, .spiral .mark:focus-visible { r: 7; }
+  .spiral.spot .mark:not(.lit) { opacity: .12; }
+  .spiral .now circle { fill: var(--accent); }
+  .spiral .now .pulse { fill: none; stroke: var(--accent); transform-box: fill-box; transform-origin: center; animation: pulse 2s infinite; }
+  @keyframes pulse { from { opacity: .8; transform: scale(.5); } to { opacity: 0; transform: scale(1.8); } }
+  .spiral .now text { fill: var(--accent); font: 400 10px var(--mono); text-transform: uppercase; letter-spacing: .1em; }
+  .spiral.mini .thread { stroke-width: 2; }
+  .spiral.replaying .thread { stroke-dasharray: 1; animation: draw 6s linear backwards; }
+  @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  .spiral.replaying .mark { animation: drop .35s cubic-bezier(.2,1.4,.4,1) backwards; animation-delay: var(--at); transform-box: fill-box; transform-origin: center; }
+  @keyframes drop { from { opacity: 0; transform: scale(0); } }
+  .spiral.hide-poem .mark[data-k='poem'], .spiral.hide-reflection .mark[data-k='reflection'],
+  .spiral.hide-project .mark[data-k='project'], .spiral.hide-essay .mark[data-k='essay'] { opacity: .06; pointer-events: none; }
+</style>

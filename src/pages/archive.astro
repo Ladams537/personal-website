@@ -1,0 +1,180 @@
+---
+// The Index: one flat, keyboard-first list of everything, on the poet's (paper) ground.
+// The preview panel is a small patch of ink: each item's generative cover is "built".
+import Layout from '../components/Layout.astro';
+import { getArchive, type Kind } from '../components/content';
+// Newest first; undated projects (ongoing work) sort to the top.
+const rows = (await getArchive()).reverse();
+const kinds: Kind[] = ['project', 'poem', 'essay', 'reflection'];
+const label = { project: 'Projects', poem: 'Poems', essay: 'Essays', reflection: 'Reflections' };
+const count = (k: Kind) => rows.filter(r => r.k === k).length;
+---
+<Layout title="Index — Louis Adams" ground="paper" page="index" description="Every project, poem, reflection and essay by Louis Adams.">
+  <main class="idx">
+    <header class="idx-head">
+      <h1>Index</h1>
+      <p>Everything, newest first. <span class="mono kbd-hint"><kbd>j</kbd><kbd>k</kbd> move · <kbd>/</kbd> filter · <kbd>⌘K</kbd> jump</span></p>
+    </header>
+
+    <div class="bar">
+      <div class="filters">
+        <button data-k="all" class="on">All <sup>{rows.length}</sup></button>
+        {kinds.map(k => <button data-k={k}><i style={`--c: var(--k-${k})`}></i>{label[k]} <sup>{count(k)}</sup></button>)}
+      </div>
+      <label class="search"><span>/</span><input id="q" placeholder="filter" autocomplete="off" /></label>
+    </div>
+
+    <div class="body">
+      <ol class="list">
+        {rows.map(r => (
+          <li class="row" data-k={r.k} data-d={r.date ?? ''} data-note={r.note} data-tags={r.tags.join(' · ')} data-rec={r.recorded ? '1' : undefined}>
+            <span class="y">{r.date ? r.date.slice(0, 7).replace('-', '.') : 'ongoing'}</span>
+            <span class="kind" style={`--c: var(--k-${r.k})`}>{r.k}</span>
+            <a class="t" href={r.href}>{r.t}{r.recorded && <b class="rec" title="Has a recording">● rec</b>}</a>
+            <span class="arrow">↵</span>
+          </li>
+        ))}
+      </ol>
+      <aside class="preview" aria-live="polite">
+        <div class="pv-art" id="pv-art"></div>
+        <p class="mono pv-kind" id="pv-kind"></p>
+        <h2 id="pv-title"></h2>
+        <p class="pv-note" id="pv-note"></p>
+        <p class="mono pv-tags" id="pv-tags"></p>
+        <a class="pv-alm mono" id="pv-alm" href="/almanac/">see it on the almanac →</a>
+      </aside>
+    </div>
+  </main>
+
+  <dialog class="palette" id="palette">
+    <input id="pq" placeholder="Jump to anything…" autocomplete="off" />
+    <ul id="pres"></ul>
+  </dialog>
+
+  <script>
+    import { fmt } from '../components/format';
+    const rows = [...document.querySelectorAll<HTMLLIElement>('.row')];
+    const q = document.querySelector<HTMLInputElement>('#q')!;
+    let kind = 'all', idx = 0;
+    const visible = () => rows.filter(r => !r.hidden);
+    const art = document.querySelector<HTMLElement>('#pv-art')!;
+
+    // Deterministic generative cover per title, drawn in the item's kind colour on ink.
+    function cover(seed: string, k: string) {
+      let h = 0; for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+      const cells = Array.from({ length: 36 }, (_, i) => ((h >> (i % 24)) & 1) ^ (i % 7 === h % 7 ? 1 : 0));
+      return `<div class="gen" style="--c: var(--k-${k})">${cells.map((c, i) => `<i class="${c ? 'f' : ''} ${i % 2 ? 'o' : ''}"></i>`).join('')}</div>`;
+    }
+    function select(i: number) {
+      const vis = visible(); if (!vis.length) return;
+      idx = (i + vis.length) % vis.length;
+      rows.forEach(r => r.classList.remove('sel'));
+      const r = vis[idx]; r.classList.add('sel'); r.scrollIntoView({ block: 'nearest' });
+      const t = r.querySelector('.t')!.firstChild!.textContent!;
+      const d = r.dataset.d;
+      document.querySelector('#pv-title')!.textContent = t;
+      document.querySelector('#pv-kind')!.textContent = [r.dataset.k, d ? fmt(d) : 'ongoing', r.dataset.rec ? 'recorded' : ''].filter(Boolean).join(' · ');
+      document.querySelector('#pv-note')!.textContent = r.dataset.note ?? '';
+      document.querySelector('#pv-tags')!.textContent = r.dataset.tags ?? '';
+      const alm = document.querySelector<HTMLAnchorElement>('#pv-alm')!;
+      alm.hidden = !d; if (d) alm.href = `/almanac/#year-${d.slice(0, 4)}`;
+      art.innerHTML = cover(t, r.dataset.k!);
+    }
+    function filter() {
+      const term = q.value.toLowerCase();
+      rows.forEach(r => (r.hidden = !((kind === 'all' || r.dataset.k === kind) && r.textContent!.toLowerCase().includes(term))));
+      select(0);
+    }
+    const buttons = [...document.querySelectorAll<HTMLButtonElement>('.filters button')];
+    buttons.forEach(b => b.addEventListener('click', () => { buttons.forEach(x => x.classList.toggle('on', x === b)); kind = b.dataset.k!; filter(); }));
+    q.addEventListener('input', filter);
+    rows.forEach(r => r.addEventListener('mouseenter', () => select(visible().indexOf(r))));
+
+    const palette = document.querySelector<HTMLDialogElement>('#palette')!;
+    const pq = document.querySelector<HTMLInputElement>('#pq')!, pres = document.querySelector('#pres')!;
+    const renderPalette = () => {
+      const term = pq.value.toLowerCase();
+      pres.innerHTML = rows.filter(r => r.textContent!.toLowerCase().includes(term)).slice(0, 8)
+        .map((r, i) => `<li class="${i ? '' : 'on'}"><a href="${r.querySelector<HTMLAnchorElement>('.t')!.href}">${r.querySelector('.t')!.firstChild!.textContent}</a><em>${r.dataset.k}</em></li>`).join('');
+    };
+    pq.addEventListener('input', renderPalette);
+    pq.addEventListener('keydown', e => { if (e.key === 'Enter') pres.querySelector<HTMLAnchorElement>('li a')?.click(); });
+    addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); pq.value = ''; renderPalette(); palette.showModal(); return; }
+      if (palette.open || document.activeElement === q) { if (e.key === 'Escape') q.blur(); return; }
+      if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); select(idx + 1); }
+      if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); select(idx - 1); }
+      if (e.key === '/') { e.preventDefault(); q.focus(); }
+      if (e.key === 'Enter') visible()[idx]?.querySelector<HTMLAnchorElement>('.t')?.click();
+    });
+    // Old list URLs (/work/, /poetry/, …) redirect here with a hash naming the kind to show.
+    const fromHash = ({ projects: 'project', poems: 'poem', essays: 'essay', reflections: 'reflection', writing: 'all' } as Record<string, string>)[location.hash.slice(1)];
+    if (fromHash) buttons.find(b => b.dataset.k === fromHash)?.click(); else select(0);
+  </script>
+
+  <style is:global>
+    .idx { max-width: 1200px; margin: 0 auto; padding: 110px clamp(16px, 4vw, 48px) 120px; }
+    .idx-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+    .idx-head h1 { font: 300 clamp(56px, 10vw, 140px)/.85 var(--serif); letter-spacing: -.04em; font-variation-settings: 'opsz' 144; }
+    .idx-head p { color: var(--paper-dim); font-style: italic; }
+    .kbd-hint { display: block; font-style: normal; margin-top: 6px; font-size: 10px; }
+    kbd { font: 11px var(--mono); border: 1px solid color-mix(in oklab, var(--paper-fg) 20%, transparent); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; margin-right: 3px; color: var(--paper-fg); }
+
+    .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; position: sticky; top: 0; z-index: 2; background: var(--paper);
+      border-top: 2px solid var(--paper-fg); border-bottom: 1px solid color-mix(in oklab, var(--paper-fg) 15%, transparent); padding: 10px 0; }
+    .filters { display: flex; gap: 4px; flex-wrap: wrap; }
+    .filters button { font: 400 12px var(--mono); background: none; border: 1px solid transparent; color: var(--paper-dim); padding: 5px 10px; border-radius: 999px; cursor: pointer; display: flex; align-items: center; gap: 7px; }
+    .filters button.on { color: var(--paper-fg); border-color: var(--paper-fg); }
+    .filters i { width: 7px; height: 7px; border-radius: 50%; background: color-mix(in oklab, var(--c) 70%, var(--paper-fg)); }
+    .filters sup { font-size: 9px; }
+    .search { display: flex; align-items: center; gap: 8px; font: 12px var(--mono); color: var(--paper-dim); }
+    .search span { border: 1px solid color-mix(in oklab, var(--paper-fg) 20%, transparent); border-radius: 4px; padding: 0 6px; }
+    .search input { font: 16px var(--mono); background: none; border: 0; outline: 0; color: var(--paper-fg); width: 160px; }
+
+    .body { display: grid; grid-template-columns: 1fr 340px; gap: 48px; }
+    .list { list-style: none; }
+    .row { display: grid; grid-template-columns: 80px 120px 1fr 24px; align-items: baseline; padding: 10px 10px; border-bottom: 1px solid color-mix(in oklab, var(--paper-fg) 10%, transparent); cursor: pointer; }
+    .row .y { font: 12px var(--mono); color: var(--paper-dim); }
+    .row .t { font: 400 21px/1.25 var(--serif); transition: transform .2s; text-decoration: none; }
+    .row .rec { font: 400 9px var(--mono); color: var(--accent); margin-left: 10px; vertical-align: middle; letter-spacing: .08em; text-transform: uppercase; }
+    .row.sel .rec { color: var(--accent-ink); }
+    .row .t::after { content: ''; position: absolute; inset: 0; }
+    .row { position: relative; }
+    .kind { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; display: flex; align-items: center; gap: 7px; color: var(--paper-dim); }
+    .kind::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: color-mix(in oklab, var(--c) 70%, var(--paper-fg)); }
+    .arrow { font: 13px var(--mono); opacity: 0; color: var(--accent); }
+    .row.sel { background: var(--ink); color: var(--ink-fg); }
+    .row.sel .y, .row.sel .kind { color: var(--ink-dim); }
+    .row.sel .kind::before { background: var(--c); }
+    .row.sel .t { transform: translateX(6px); }
+    .row.sel .arrow { opacity: 1; }
+
+    .preview { position: sticky; top: 72px; align-self: start; padding-top: 12px; }
+    .pv-art { aspect-ratio: 1; background: var(--ink); margin-bottom: 16px; overflow: hidden; }
+    .gen { display: grid; grid-template-columns: repeat(6, 1fr); height: 100%; }
+    .gen i { background: var(--c); opacity: .1; }
+    .gen i.f { opacity: 1; border-radius: 50% 0; }
+    .gen i.f.o { border-radius: 0 50%; }
+    .pv-kind { color: var(--paper-dim); font-size: 10px; }
+    .preview h2 { font: 400 32px/1.05 var(--serif); letter-spacing: -.02em; margin: 6px 0 12px; }
+    .pv-note { font-size: 16px; line-height: 1.45; color: var(--paper-fg); margin-bottom: 10px; }
+    .pv-tags { font-size: 10px; color: var(--paper-dim); margin-bottom: 14px; text-transform: none; letter-spacing: .04em; }
+    .pv-alm { color: var(--accent); text-decoration: none; font-size: 10px; }
+    .pv-alm[hidden] { display: none; }
+    .pv-alm:hover { text-decoration: underline; }
+
+    .palette { margin: 14vh auto auto; width: min(560px, 92vw); border: 1px solid color-mix(in oklab, var(--paper-fg) 15%, transparent); border-radius: 12px; background: var(--paper); color: var(--paper-fg); box-shadow: 0 30px 80px rgba(0,0,0,.35); overflow: hidden; }
+    .palette::backdrop { background: rgba(0,0,0,.25); backdrop-filter: blur(2px); }
+    .palette input { width: 100%; font: 400 20px var(--serif); padding: 18px 20px; border: 0; border-bottom: 1px solid color-mix(in oklab, var(--paper-fg) 15%, transparent); background: none; color: inherit; outline: 0; }
+    .palette ul { list-style: none; padding: 6px; }
+    .palette li { display: flex; justify-content: space-between; padding: 10px 14px; border-radius: 8px; }
+    .palette li a { text-decoration: none; }
+    .palette li.on { background: var(--ink); color: var(--ink-fg); }
+    .palette li em { font: 11px var(--mono); font-style: normal; opacity: .6; text-transform: uppercase; }
+
+    @media (max-width: 860px) {
+      .body { grid-template-columns: 1fr; } .preview { display: none; } .kbd-hint { display: none; }
+      .row { grid-template-columns: 70px 1fr; } .row .kind { grid-column: 2; grid-row: 1; } .row .t { grid-column: 1 / -1; } .arrow { display: none; }
+    }
+  </style>
+</Layout>

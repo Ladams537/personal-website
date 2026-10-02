@@ -5,6 +5,7 @@ import type { APIContext } from 'astro';
 export async function GET(context: APIContext) {
   const poetry = await getCollection('poetry');
   const reflections = await getCollection('reflections');
+  const essays = await getCollection('essays');
 
   const items = [
     ...poetry.map(p => ({
@@ -17,11 +18,16 @@ export async function GET(context: APIContext) {
       pubDate: r.data.date,
       link: `/reflections/${r.slug}/`,
     })),
+    ...essays.map(e => ({
+      title: e.data.title,
+      pubDate: e.data.date,
+      link: `/essays/${e.slug}/`,
+    })),
   ].sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf());
 
   return rss({
     title: 'Ardent — Louis Adams',
-    description: 'Poetry and reflections by Louis Adams.',
+    description: 'Poetry, reflections and essays by Louis Adams.',
     site: context.site!,
     items,
   });
