@@ -6,6 +6,7 @@ visualLabel: ["READ", "REFLECT", "RECOMMEND"]
 status: "Python CLI experiment"
 order: 5
 featured: false
+date: 2026-09-01
 technologies: [Python, Anthropic API, CSV, Markdown]
 ---
 
