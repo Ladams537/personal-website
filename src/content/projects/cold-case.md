@@ -7,6 +7,7 @@ status: "Interactive prototype"
 order: 4
 featured: true
 date: 2026-06-01
+repo: https://github.com/Ladams537/cold-case
 technologies: [TypeScript, Next.js, React, AI SDK, Zod]
 ---
 

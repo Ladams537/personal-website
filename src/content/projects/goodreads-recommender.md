@@ -7,6 +7,7 @@ status: "Python CLI experiment"
 order: 5
 featured: false
 date: 2026-09-01
+repo: https://github.com/Ladams537/goodreads-recs
 technologies: [Python, Anthropic API, CSV, Markdown]
 ---
 
