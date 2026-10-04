@@ -2,8 +2,9 @@
 // Every year on one continuous spiral; angle = time of year, radius = time elapsed.
 // Render-only: interactivity lives on the page so the home teaser can stay static.
 import { stacks, yearsOf, months, type Item } from './content';
-interface Props { items: Item[]; mini?: boolean }
-const { items, mini = false } = Astro.props;
+export interface Chapter { title: string; start: string; end?: string; href?: string; draft?: boolean }
+interface Props { items: Item[]; chapters?: Chapter[]; mini?: boolean }
+const { items, chapters = [], mini = false } = Astro.props;
 const years = yearsOf(items);
 
 const R0 = 92, GAP = 78, STEP = 7, DOT = mini ? 3.6 : 3.1;
@@ -25,6 +26,16 @@ const sector = (r1: number, r2: number, a1: number, a2: number) => {
 const [nx, ny] = pt(tNow);
 // Ongoing projects run as a thread along the spiral from their start to today.
 const tOf = (d: string) => +d.slice(0, 4) - y0 + (+d.slice(5, 7) - 1 + (+d.slice(8, 10) - 1) / 30.4) / 12;
+// Chapters (seasons) run as a soft band just inside the thread, labelled where they begin.
+const bands = chapters.map((c, ci) => {
+  const t0 = Math.max(0, tOf(c.start)), t1 = Math.min(tNow, c.end ? tOf(c.end) : tNow);
+  if (t1 <= t0) return null;
+  const n = Math.max(2, Math.ceil((t1 - t0) * 240));
+  const d = Array.from({ length: n + 1 }, (_, j) => { const t = t0 + ((t1 - t0) * j) / n; const [x, y] = pt(t, rad(t) - 14); return `${j ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`; }).join('');
+  const tl = t0 + Math.min(0.09, (t1 - t0) / 4);
+  const [lx, ly] = pt(tl, rad(tl) - 28);
+  return { d, lx, ly, c, ci };
+}).filter(Boolean) as { d: string; lx: number; ly: number; c: Chapter; ci: number }[];
 const threads = items.filter(i => i.ongoing && i.date).map(i => {
   const t0 = tOf(i.date!), n = Math.max(2, Math.ceil((tNow - t0) * 240));
   const d = Array.from({ length: n + 1 }, (_, j) => { const t = t0 + ((tNow - t0) * j) / n; const [x, y] = pt(t, rad(t) - 4); return `${j ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`; }).join('');
@@ -40,6 +51,11 @@ const threads = items.filter(i => i.ongoing && i.date).map(i => {
       {!mini && <text x={(OUT + 14) * Math.cos(mid)} y={(OUT + 14) * Math.sin(mid)} class="month">{m}</text>}
     </g>;
   })}
+  {!mini && bands.map(({ d, lx, ly, c, ci }) => (
+    <a href={c.href ?? '/about/'} class:list={['chapter', { alt: ci % 2 === 1 }]} aria-label={`Chapter: ${c.title}`}>
+      <path d={d} class="band" /><text x={lx} y={ly} class="chapter-label">{c.title}{c.draft ? ' (draft)' : ''}</text>
+    </a>
+  ))}
   <path d={spiral} class="thread" pathLength="1" />
   {threads.map(({ d, it }) => <path d={d} class="ongoing" style={`--c: var(--k-${it.k})`}><title>{it.t}: {it.when}</title></path>)}
   {!mini && years.map(y => { const [x, yy] = pt(y - y0); return (
@@ -62,6 +78,11 @@ const threads = items.filter(i => i.ongoing && i.date).map(i => {
   .spiral .month-g.lit .wedge { fill: color-mix(in oklab, var(--accent) 12%, transparent); }
   .spiral .month { fill: var(--ink-dim); font: 400 11px var(--mono); text-anchor: middle; dominant-baseline: middle; text-transform: uppercase; letter-spacing: .1em; }
   .spiral .month-g.lit .month { fill: var(--accent); }
+  .spiral .band { fill: none; stroke: color-mix(in oklab, var(--accent-ink) 14%, transparent); stroke-width: 6; stroke-linecap: round; transition: stroke .2s; }
+  .spiral .chapter.alt .band { stroke: color-mix(in oklab, var(--ink-fg) 12%, transparent); }
+  .spiral .chapter:hover .band, .spiral .chapter:focus-visible .band { stroke: color-mix(in oklab, var(--accent-ink) 45%, transparent); }
+  .spiral .chapter { outline: none; }
+  .spiral .chapter-label { fill: var(--accent-ink); font: italic 300 13px var(--serif); text-anchor: middle; }
   .spiral .ongoing { fill: none; stroke: var(--c); stroke-width: 3; stroke-linecap: round; opacity: .85; }
   .spiral.spot .ongoing { opacity: .15; }
   .spiral .thread { fill: none; stroke: color-mix(in oklab, var(--ink-fg) 28%, transparent); stroke-width: 1; }

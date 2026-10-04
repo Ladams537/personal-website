@@ -1,0 +1,98 @@
+---
+// Work: the page for someone deciding whether to hire Louis. Builder's (ink) ground.
+// Pitch and contact copy come from src/content/passages; the CV link appears once public/cv.pdf exists.
+import { existsSync } from 'node:fs';
+import { getCollection } from 'astro:content';
+import Layout from '../components/Layout.astro';
+import { getPassage } from '../components/content';
+import { fmtMonth } from '../components/format';
+
+const pitch = await getPassage('work');
+const contact = await getPassage('contact');
+const projects = (await getCollection('projects')).sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0));
+const when = (d?: Date, ongoing = false) => (d ? fmtMonth(d.toISOString().slice(0, 10)) + (ongoing ? ' – present' : '') : '');
+const hasCv = existsSync('public/cv.pdf');
+const stack = [...new Set(projects.flatMap(p => p.data.technologies))];
+---
+<Layout title="Work — Louis Adams" ground="ink" page="work" description="Projects, stack and contact for Louis Adams, a builder and poet working towards forward deployed engineering.">
+  <main class="work">
+    <header class="work-head">
+      <p class="mono dim">~/louis/work</p>
+      <h1>Work</h1>
+      {pitch && (
+        <div class="pitch">
+          {pitch.entry.data.draft && <span class="draft-badge">draft</span>}
+          <pitch.Content />
+        </div>
+      )}
+      <p class="actions">
+        <a href="mailto:louistadams3@gmail.com" class="btn">Email me ↗</a>
+        {hasCv && <a href="/cv.pdf" class="btn ghost">CV (PDF) ↗</a>}
+      </p>
+    </header>
+
+    <section class="projects" aria-label="Projects">
+      {projects.map((p, i) => (
+        <article class="proj">
+          <p class="proj-n mono">{String(i + 1).padStart(2, '0')}</p>
+          <div class="proj-main">
+            <h2><a href={`/projects/${p.slug}/`}>{p.data.title}</a></h2>
+            <p class="proj-meta mono">{[when(p.data.date, p.data.ongoing), p.data.status, p.data.category].filter(Boolean).join(' · ')}</p>
+            <p class="proj-sum">{p.data.summary}</p>
+            <p class="chips">{p.data.technologies.map(t => <span>{t}</span>)}</p>
+            <p class="links mono">
+              <a href={`/projects/${p.slug}/`}>Case study →</a>
+              {p.data.repo && <a href={p.data.repo}>Source ↗</a>}
+              {p.data.live && <a href={p.data.live}>Live ↗</a>}
+            </p>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <section class="aside-grid">
+      <div>
+        <p class="mono dim">Stack, across projects</p>
+        <p class="chips">{stack.map(t => <span>{t}</span>)}</p>
+      </div>
+      {contact && (
+        <div class="contact">
+          <p class="mono dim">{contact.entry.data.title}{contact.entry.data.draft && <span class="draft-badge">draft</span>}</p>
+          <contact.Content />
+          <p><a href="mailto:louistadams3@gmail.com">louistadams3@gmail.com ↗</a></p>
+        </div>
+      )}
+    </section>
+  </main>
+
+  <style is:global>
+    .work { max-width: 980px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 40px) 120px; font-family: var(--mono); }
+    .work .dim { color: var(--ink-dim); }
+    .work-head h1 { font: 600 clamp(56px, 10vw, 120px)/.9 var(--mono); letter-spacing: -.05em; margin: 14px 0 26px; }
+    .pitch { font: 300 21px/1.6 var(--serif); max-width: 58ch; color: var(--ink-fg); }
+    .pitch p + p { margin-top: .8em; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+    .btn { font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: .1em; text-decoration: none; padding: 10px 16px; background: var(--accent); color: var(--ink); }
+    .btn:hover { filter: brightness(1.1); }
+    .btn.ghost { background: none; color: var(--ink-fg); border: 1px solid color-mix(in oklab, var(--ink-fg) 30%, transparent); }
+
+    .projects { margin-top: 72px; border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .proj { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 30px 0; border-bottom: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .proj-n { color: var(--ink-dim); padding-top: 8px; }
+    .proj h2 { font: 600 28px/1.15 var(--mono); letter-spacing: -.03em; }
+    .proj h2 a { text-decoration: none; } .proj h2 a:hover { color: var(--accent); }
+    .proj-meta { font-size: 11px; color: var(--accent); margin: 6px 0 12px; text-transform: uppercase; letter-spacing: .06em; }
+    .proj-sum { font: 300 19px/1.55 var(--serif); max-width: 62ch; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .chips span { font-size: 11px; border: 1px solid color-mix(in oklab, var(--ink-fg) 25%, transparent); padding: 3px 8px; color: var(--ink-dim); }
+    .links { display: flex; gap: 18px; margin-top: 14px; font-size: 12px; }
+    .links a { color: var(--accent); text-decoration: none; } .links a:hover { text-decoration: underline; }
+
+    .aside-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 64px; }
+    .contact { font: 300 18px/1.6 var(--serif); }
+    .contact ul { list-style: none; margin: 10px 0 14px; }
+    .contact li { padding: 4px 0; border-bottom: 1px dashed color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .contact a { color: var(--accent); }
+    @media (max-width: 760px) { .aside-grid { grid-template-columns: 1fr; } .proj { grid-template-columns: 1fr; gap: 4px; } }
+  </style>
+</Layout>

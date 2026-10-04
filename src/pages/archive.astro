@@ -20,6 +20,7 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
       <div class="filters">
         <button data-k="all" class="on">All <sup>{rows.length}</sup></button>
         {kinds.map(k => <button data-k={k}><i style={`--c: var(--k-${k})`}></i>{label[k]} <sup>{count(k)}</sup></button>)}
+        <button data-k="recorded"><i class="rec-dot"></i>Recorded <sup>{rows.filter(r => r.recorded).length}</sup></button>
       </div>
       <label class="search"><span>/</span><input id="q" placeholder="filter" autocomplete="off" /></label>
     </div>
@@ -81,7 +82,8 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
     }
     function filter() {
       const term = q.value.toLowerCase();
-      rows.forEach(r => (r.hidden = !((kind === 'all' || r.dataset.k === kind) && r.textContent!.toLowerCase().includes(term))));
+      const matchesKind = (r: HTMLElement) => kind === 'all' || r.dataset.k === kind || (kind === 'recorded' && !!r.dataset.rec);
+      rows.forEach(r => (r.hidden = !(matchesKind(r) && r.textContent!.toLowerCase().includes(term))));
       select(0);
     }
     const buttons = [...document.querySelectorAll<HTMLButtonElement>('.filters button')];
@@ -107,7 +109,7 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
       if (e.key === 'Enter') visible()[idx]?.querySelector<HTMLAnchorElement>('.t')?.click();
     });
     // Old list URLs (/work/, /poetry/, …) redirect here with a hash naming the kind to show.
-    const fromHash = ({ projects: 'project', poems: 'poem', essays: 'essay', reflections: 'reflection', writing: 'all' } as Record<string, string>)[location.hash.slice(1)];
+    const fromHash = ({ projects: 'project', poems: 'poem', essays: 'essay', reflections: 'reflection', recorded: 'recorded', writing: 'all' } as Record<string, string>)[location.hash.slice(1)];
     if (fromHash) buttons.find(b => b.dataset.k === fromHash)?.click(); else select(0);
   </script>
 
@@ -126,6 +128,7 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
     .filters button.on { color: var(--paper-fg); border-color: var(--paper-fg); }
     .filters i { width: 7px; height: 7px; border-radius: 50%; background: color-mix(in oklab, var(--c) 70%, var(--paper-fg)); }
     .filters sup { font-size: 9px; }
+    .filters i.rec-dot { background: none; border: 1.5px solid var(--accent); width: 8px; height: 8px; }
     .search { display: flex; align-items: center; gap: 8px; font: 12px var(--mono); color: var(--paper-dim); }
     .search span { border: 1px solid color-mix(in oklab, var(--paper-fg) 20%, transparent); border-radius: 4px; padding: 0 6px; }
     .search input { font: 16px var(--mono); background: none; border: 0; outline: 0; color: var(--paper-fg); width: 160px; }

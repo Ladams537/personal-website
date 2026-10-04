@@ -12,6 +12,7 @@ const featured = projects.filter(p => p.data.featured);
 const stack = [...new Set(projects.flatMap(p => p.data.technologies))];
 const writing = archive.filter(i => i.k !== 'project' && i.date).reverse();
 const poems = writing.filter(i => i.k === 'poem').slice(0, 6);
+const recordings = writing.filter(i => i.recorded);
 const latestOther = (['reflection', 'essay'] as const).map(k => writing.find(i => i.k === k)!).filter(Boolean);
 // The pull quote is the opening of the newest poem; the deep layer is that poem in full.
 const poemEntries = (await getCollection('poetry')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -54,6 +55,12 @@ const thisYear = archive.filter(i => i.year === new Date().getFullYear()).length
         <ul class="poems">
           {poems.map((p, i) => <li><a href={p.href}><span>{p.t}{p.recorded && <b class="rec" title="Has a recording">●</b>}</span><i>{numerals[i]}</i></a></li>)}
         </ul>
+        {recordings.length > 0 && (
+          <div class="heard">
+            <p class="mono">Heard aloud</p>
+            <ul>{recordings.map(r => <li><a href={r.href}><span class="play" aria-hidden="true">▶</span>{r.t}</a></li>)}</ul>
+          </div>
+        )}
         <ul class="also">
           {latestOther.map(o => <li><a href={o.href}><span class="mono">latest {o.k}</span> {o.t}</a></li>)}
           <li><a href="/archive/"><span class="mono">everything</span> the full index →</a></li>
@@ -160,6 +167,12 @@ const thisYear = archive.filter(i => i.year === new Date().getFullYear()).length
     .rec { font-size: 9px; color: var(--accent); margin-left: 8px; vertical-align: middle; font-weight: 400; }
     .cite { display: block; margin-top: 8px; font-size: 15px; color: var(--accent); text-decoration: none; }
     .cite:hover { text-decoration: underline; }
+    .heard { margin-top: 32px; padding: 18px 20px; background: color-mix(in oklab, var(--paper-fg) 5%, transparent); border-left: 2px solid var(--accent); }
+    .heard .mono { font-size: 10px; color: var(--paper-dim); margin-bottom: 8px; }
+    .heard ul { list-style: none; }
+    .heard a { display: flex; align-items: center; gap: 12px; padding: 6px 0; font: italic 300 21px var(--serif); text-decoration: none; }
+    .heard a:hover { color: var(--accent); }
+    .play { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--paper); font: 400 9px var(--mono); font-style: normal; padding-left: 2px; }
     .also { list-style: none; margin-top: 28px; }
     .also a { display: block; padding: 6px 0; font-size: 17px; text-decoration: none; }
     .also a:hover { color: var(--accent); }

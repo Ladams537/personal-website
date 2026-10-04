@@ -4,7 +4,8 @@
 import Layout from '../components/Layout.astro';
 import Spiral from '../components/Spiral.astro';
 import YearDial from '../components/YearDial.astro';
-import { getArchive, dated, yearsOf, months, type Kind } from '../components/content';
+import { getArchive, getSeasons, dated, yearsOf, type Kind } from '../components/content';
+import { fmtMonth } from '../components/format';
 
 const archive = await getArchive();
 const items = dated(archive);
@@ -13,21 +14,10 @@ const years = yearsOf(archive);
 const kinds = (['poem', 'reflection', 'essay', 'project'] as Kind[]).filter(k => items.some(i => i.k === k));
 const label = { poem: 'Poems', reflection: 'Reflections', project: 'Releases', essay: 'Essays' };
 const recorded = items.filter(i => i.recorded).length;
-const absWeek = (y: number, w: number) => (y - years[0]) * 52 + w;
-const active = new Set(items.map(i => absWeek(i.year, i.week)));
-const runs: { from: number; to: number }[] = [];
-for (let a = 0; a < years.length * 52; a++) {
-  if (!active.has(a)) continue;
-  const last = runs[runs.length - 1];
-  if (last && last.to === a - 1) last.to = a; else runs.push({ from: a, to: a });
-}
-const longest = runs.sort((a, b) => (b.to - b.from) - (a.to - a.from))[0];
-const facts = Object.fromEntries(years.map(y => {
-  const list = items.filter(i => i.year === y);
-  const perMonth = months.map((_, m) => list.filter(i => +i.date!.slice(5, 7) === m + 1).length);
-  const peak = perMonth.indexOf(Math.max(...perMonth));
-  return [y, { total: list.length, poems: list.filter(i => i.k === 'poem').length, peak: `${months[peak]} · ${perMonth[peak]}` }];
-}));
+// Seasons, in Louis's own words, replace streaks and "busiest month" counts.
+const seasons = await getSeasons();
+const chapters = seasons.map(se => ({ title: se.data.title, start: se.data.start.toISOString().slice(0, 10), end: se.data.end?.toISOString().slice(0, 10), href: se.data.reflection ? `/reflections/${se.data.reflection}/` : '/about/', draft: se.data.draft }));
+const month = (d: Date) => fmtMonth(d.toISOString().slice(0, 10));
 ---
 <Layout title="Almanac — Louis Adams" ground="ink" page="almanac">
   <main class="alm">
@@ -49,7 +39,7 @@ const facts = Object.fromEntries(years.map(y => {
     </div>
 
     <figure class="stage">
-      <div class="view view-spiral"><Spiral items={archive} /></div>
+      <div class="view view-spiral"><Spiral items={archive} chapters={chapters} /></div>
       <div class="view view-year"><YearDial items={archive} /></div>
       <div class="readout" aria-live="polite">
         <p class="mono" id="ck"></p>
@@ -63,11 +53,18 @@ const facts = Object.fromEntries(years.map(y => {
       <p class="hint mono dim" id="hint">Hover a month to compare years · click a year to zoom in · click a dot to read it</p>
     </div>
 
-    <section class="facts">
-      <div><p class="mono dim">Everything</p><b>{items.length}</b><span>pieces since {years[0]}</span></div>
-      <div><p class="mono dim">Longest run</p><b>{longest.to - longest.from + 1} weeks</b><span>without missing one</span></div>
-      {years.map(y => <div class="yf" data-y={y}><p class="mono dim">{y}</p><b>{facts[y].total}</b><span>busiest: {facts[y].peak}</span></div>)}
-    </section>
+    {seasons.length > 0 && (
+      <section class="chapters">
+        <p class="mono dim">Chapters</p>
+        {seasons.map(se => (
+          <a class="chap" href={se.data.reflection ? `/reflections/${se.data.reflection}/` : '/about/'}>
+            <span class="mono span">{month(se.data.start)} – {se.data.end ? month(se.data.end) : 'now'}{se.data.draft && <span class="draft-badge">draft</span>}</span>
+            <span class="ct">{se.data.title}</span>
+            <span class="cs">{se.data.summary}</span>
+          </a>
+        ))}
+      </section>
+    )}
   </main>
 
   <script>
@@ -85,7 +82,6 @@ const facts = Object.fromEntries(years.map(y => {
       const y = m && years.includes(+m[1]) ? +m[1] : null;
       document.body.dataset.view = y ? 'year' : 'spiral';
       document.querySelectorAll<HTMLAnchorElement>('.modes a').forEach(a => a.classList.toggle('on', a.dataset.mode === (y ? `year-${y}` : 'spiral')));
-      document.querySelectorAll<HTMLElement>('.yf').forEach(f => f.classList.toggle('on', +f.dataset.y! === y));
       document.querySelector('#hint')!.textContent = y ? '← → step through years · click a dot to read it' : 'Hover a month to compare years · click a year to zoom in · click a dot to read it';
       if (y) {
         dial.querySelectorAll<SVGElement>('.yr').forEach(g => g.classList.toggle('on', +g.dataset.y! === y));
@@ -184,12 +180,13 @@ const facts = Object.fromEntries(years.map(y => {
     .pill:hover { border-color: var(--accent); color: var(--accent); }
     .hint { font-size: 10px; }
 
-    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px; margin-top: 56px; padding-top: 24px; border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
-    .facts b { display: block; font: 300 40px/1.1 var(--serif); margin: 6px 0 2px; }
-    .facts span { font-size: 15px; color: var(--ink-dim); }
-    .yf { transition: opacity .3s; }
-    body[data-view='year'] .yf:not(.on) { opacity: .35; }
-    .yf.on b { color: var(--accent); }
+    .chapters { margin-top: 56px; padding-top: 24px; border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .chap { display: grid; grid-template-columns: 230px 1fr; gap: 4px 24px; padding: 18px 0; text-decoration: none; border-bottom: 1px dashed color-mix(in oklab, var(--ink-fg) 12%, transparent); }
+    .chap .span { font-size: 10px; color: var(--ink-dim); grid-row: span 2; padding-top: 8px; }
+    .chap .ct { font: 300 28px/1.15 var(--serif); }
+    .chap .cs { font: italic 300 17px/1.45 var(--serif); color: var(--ink-dim); }
+    .chap:hover .ct { color: var(--accent); }
+    @media (max-width: 700px) { .chap { grid-template-columns: 1fr; } .chap .span { grid-row: auto; padding: 0; } }
     @media (max-width: 700px) {
       .spiral .month, .yeardial .month { font-size: 15px; }
       .readout { position: static; transform: none; width: auto; margin-top: 4px; }

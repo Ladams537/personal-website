@@ -4,7 +4,6 @@ const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERC
 const site = process.env.SITE_URL || (vercelHost ? `https://${vercelHost}` : 'http://localhost:4321');
 // The old list pages now live as filters on the Index.
 const redirects = {
-  '/work': '/archive/#projects',
   '/writing': '/archive/#writing',
   '/poetry': '/archive/#poems',
   '/reflections': '/archive/#reflections',
