@@ -1,6 +1,5 @@
 ---
 title: "Work"
-draft: true
 ---
 
-I build tools that make hidden judgement visible: rules that explain why a check failed, imports you can inspect before they apply, recommendations you can question and correct. I'm happiest where the technology meets the people using it, which is why I'm pursuing forward deployed engineering.
+I like building tools that ask _why_: partly to understand myself a little more, and partly because that _why_, once it's visible, can make life a little easier for me and for other people. Assay tells you why a check failed. Ledger turns a messy training log into a history you can read. I love the place where technology meets people, and that's where I want to work. My first target: forward deployed engineering.
