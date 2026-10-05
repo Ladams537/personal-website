@@ -8,7 +8,7 @@ I stand at my altar
 Filled with dirt 
 And freezing cold water. 
 As I am here, I won-
-der, “When I go under, 
+Daring, “When I go under, 
 And go before my Maker,
 Who, or maybe 
 Just, will I 
@@ -42,3 +42,8 @@ To this alter,
 As I cling to the last-
 In’ parts of me – E-
 Go under.
+
+I emerge,
+London Bridge above,
+With a decision
+I can't reverse.
