@@ -41,6 +41,35 @@ const projects = defineCollection({
     date: z.date().optional(),
     // Still in active development: shown as "<month> – present" and drawn as a thread to today.
     ongoing: z.boolean().default(false),
+    // Public source and a running version, when they exist.
+    repo: z.string().url().optional(),
+    live: z.string().url().optional(),
   }),
 });
-export const collections = { poetry, reflections, essays, projects };
+
+// Drafts render on local and preview builds (with a badge) but never in production.
+const draft = z.boolean().default(false);
+
+// Chapters of life, written in Louis's own words. The latest open season is "now" on the
+// About page, and every season is drawn as a labelled span on the Almanac.
+const seasons = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    start: z.date(),
+    end: z.date().optional(),
+    summary: z.string(),
+    // Slug of a reflection that tells this season properly, once it's written.
+    reflection: z.string().optional(),
+    draft,
+  }),
+});
+
+// Standalone passages: `constants` (what doesn't change), `contact` (what to write about),
+// `work` (the pitch on /work/).
+const passages = defineCollection({
+  type: 'content',
+  schema: z.object({ title: z.string(), draft }),
+});
+
+export const collections = { poetry, reflections, essays, projects, seasons, passages };

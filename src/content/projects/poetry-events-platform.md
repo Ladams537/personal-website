@@ -7,6 +7,7 @@ status: "Learning project"
 order: 1
 featured: true
 date: 2026-05-01
+repo: https://github.com/Ladams537/poetry-events-platform
 technologies:
   - TypeScript
   - SvelteKit

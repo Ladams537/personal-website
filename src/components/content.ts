@@ -64,6 +64,19 @@ export function stacks(items: Item[]) {
   return m;
 }
 
+/** Production builds leave drafts out; local and preview builds show them with a badge. */
+export const isProduction = process.env.VERCEL_ENV === 'production';
+export const published = <T extends { data: { draft: boolean } }>(entries: T[]) => entries.filter(e => !isProduction || !e.data.draft);
+
+export async function getSeasons() {
+  return published(await getCollection('seasons')).sort((a, b) => a.data.start.valueOf() - b.data.start.valueOf());
+}
+
+export async function getPassage(id: 'constants' | 'contact' | 'work') {
+  const entry = published(await getCollection('passages')).find(e => e.slug === id);
+  return entry ? { entry, ...(await entry.render()) } : null;
+}
+
 /** First stanza of a poem, as lines, for pull quotes. */
 export function firstStanza(entry: CollectionEntry<'poetry'>, max = 4) {
   return entry.body.trim().split(/\n\s*\n/)[0].split('\n').map(l => l.trim()).filter(Boolean).slice(0, max);

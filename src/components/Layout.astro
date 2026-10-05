@@ -3,13 +3,14 @@
 // `ground` says which side of the seam a page belongs to: both (home), ink (Almanac, projects),
 // paper (Index, writing).
 import './tokens.css';
-interface Props { title: string; ground: 'split' | 'ink' | 'paper'; page?: 'home' | 'almanac' | 'index'; description?: string }
+interface Props { title: string; ground: 'split' | 'ink' | 'paper'; page?: 'home' | 'work' | 'almanac' | 'index' | 'about'; description?: string }
 const { title, ground, page, description = 'Louis Adams, a builder and poet. A home for the things I make, the ideas I follow, and the words I write along the way.' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const links = [
-  { href: '/', label: 'Home', id: 'home' },
+  { href: '/work/', label: 'Work', id: 'work' },
   { href: '/almanac/', label: 'Almanac', id: 'almanac' },
   { href: '/archive/', label: 'Index', id: 'index' },
+  { href: '/about/', label: 'About', id: 'about' },
   { href: 'mailto:louistadams3@gmail.com', label: 'Contact ↗', id: 'contact' },
 ];
 ---
@@ -66,8 +67,13 @@ const links = [
     .site-nav[data-ground='ink'] { color: var(--ink-fg); }
     .site-nav[data-ground='paper'] { color: var(--paper-fg); }
 
-    /* On phones the name already links home, so the Home link makes room for Contact. */
-    @media (max-width: 600px) { .site-links { gap: 14px; } .site-links a[href="/"] { display: none; } }
+    .draft-badge { display: inline-block; font: 400 9px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #fff; background: #b4532a; padding: 2px 6px; border-radius: 2px; vertical-align: middle; margin-left: 8px; }
+    /* Phones: the links wrap onto their own row under the name. */
+    @media (max-width: 640px) {
+      .site-nav { flex-wrap: wrap; row-gap: 10px; }
+      .site-links { gap: 14px; width: 100%; justify-content: space-between; }
+      .site-links a { font-size: 11px; letter-spacing: .08em; }
+    }
   </style>
 </body>
 </html>
