@@ -1,6 +1,7 @@
 ---
 title: "Baptism"
 date: 2026-10-05
+excerpt: "Freezing water, cheering lads and lassies; a maker, His making."
 tags: ["Identity", "Growth"]
 ---
 
