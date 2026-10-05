@@ -33,11 +33,23 @@ Project content lives in `src/content/projects/`. Each Markdown entry declares `
 
 Projects can also set `repo` and `live` URLs; they appear as Source and Live links on `/work/`.
 
+### Experience and CV
+
+`src/content/experience/` holds one file per role (`org`, `role`, `start`, optional `end`), with the bullet list as the body. Roles appear on `/work/` and on the CV. Projects with a `cvLine` appear in the CV's Projects section. Education and skills live in `passages/education.md` and `passages/skills.md`.
+
+The CV is the `/cv/` page printed to `public/cv.pdf`. After changing any of the sources above, run:
+
+```bash
+npm run cv
+```
+
+This builds the site and prints the PDF with a local headless Chromium (Playwright's cached one, or Chrome; set `CHROME_PATH` to choose). It warns if the CV runs past one page. Commit the regenerated `public/cv.pdf`; Vercel serves it as a static file.
+
 ### Seasons and passages
 
 `src/content/seasons/` holds chapters of life: `title`, `start`, optional `end`, a one-line `summary`, an optional `reflection` slug that tells the season properly, and a body. The open season is "this season" on About, and every season is drawn as a labelled band on the Almanac spiral.
 
-`src/content/passages/` holds `constants.md` (what doesn't change, on About), `contact.md` (what to write about, on About and Work) and `work.md` (the pitch on Work).
+`src/content/passages/` holds `constants.md` (what doesn't change, on About), `contact.md` (what to write about, on About and Work), `work.md` (the pitch on Work), and `education.md` and `skills.md` (on the CV).
 
 ### Drafts
 

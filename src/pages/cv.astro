@@ -1,0 +1,75 @@
+---
+// Printable CV. Single source with /work/: experience, projects (cvLine) and the education and
+// skills passages. `npm run cv` builds the site and prints this page to public/cv.pdf.
+// Styles are inline so the built HTML prints correctly from file://.
+import { getCollection } from 'astro:content';
+import { getExperience, getPassage } from '../components/content';
+
+const mon = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const short = (d: Date) => `${mon[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+const experience = await Promise.all((await getExperience()).map(async e => ({ e, ...(await e.render()) })));
+const projects = (await getCollection('projects'))
+  .filter(p => p.data.cvLine)
+  .sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0));
+const education = await getPassage('education');
+const skills = await getPassage('skills');
+const siteHost = Astro.site ? new URL(Astro.site).host : '';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Louis Adams — CV</title>
+  <meta name="robots" content="noindex" />
+  <style is:inline>
+    @page { size: A4; margin: 11mm 14mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font: 8.9pt/1.34 "Helvetica Neue", Helvetica, Arial, sans-serif; color: #1d2825; max-width: 180mm; margin: 0 auto; }
+    @media screen { body { padding: 14mm 0; } }
+    a { color: inherit; text-decoration: none; }
+    header { margin-bottom: 6pt; }
+    h1 { font: 600 20pt/1.1 "Helvetica Neue", Helvetica, Arial, sans-serif; letter-spacing: -.01em; }
+    .contact { margin-top: 3pt; color: #4b524a; }
+    h2 { font-size: 8.4pt; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #a3461f; border-bottom: .6pt solid #c9c2b2; padding-bottom: 2pt; margin: 8pt 0 4pt; }
+    .item { margin-bottom: 4.5pt; break-inside: avoid; }
+    .line { display: flex; justify-content: space-between; gap: 12pt; }
+    .line b { font-weight: 600; }
+    .line .role { color: #4b524a; font-weight: 400; }
+    .when { color: #4b524a; white-space: nowrap; }
+    ul { padding-left: 11pt; margin-top: 2pt; }
+    li { margin-top: 1pt; }
+    li::marker { color: #a3461f; }
+    .proj p { margin-top: 1.5pt; }
+    .tech { color: #4b524a; font-weight: 400; }
+    .passage p { margin-top: 2pt; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Louis Adams</h1>
+    <p class="contact">London, UK · <a href="mailto:louistadams3@gmail.com">louistadams3@gmail.com</a></p>
+    <p class="contact">
+      <a href="https://github.com/Ladams537">github.com/Ladams537</a> · <a href="https://linkedin.com/in/louis-adams-eee">linkedin.com/in/louis-adams-eee</a>{siteHost && <> · <a href={Astro.site?.toString()}>{siteHost}</a></>}
+    </p>
+  </header>
+
+  <h2>Experience</h2>
+  {experience.map(({ e, Content }) => (
+    <div class="item">
+      <p class="line"><span><b>{e.data.org}</b> <span class="role">· {e.data.role}</span></span><span class="when">{short(e.data.start)} – {e.data.end ? short(e.data.end) : 'Present'}</span></p>
+      <Content />
+    </div>
+  ))}
+
+  <h2>Projects</h2>
+  {projects.map(p => (
+    <div class="item proj">
+      <p class="line"><span><b>{p.data.title}</b> <span class="tech">· {p.data.technologies.slice(0, 3).join(', ')}</span></span><span class="when">{p.data.date ? short(p.data.date) : ''}{p.data.ongoing ? ' – Present' : ''}</span></p>
+      <p>{p.data.cvLine}</p>
+    </div>
+  ))}
+
+  {education && <><h2>Education</h2><div class="item passage"><education.Content /></div></>}
+  {skills && <><h2>Skills</h2><div class="item passage"><skills.Content /></div></>}
+</body>
+</html>

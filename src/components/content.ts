@@ -72,9 +72,13 @@ export async function getSeasons() {
   return published(await getCollection('seasons')).sort((a, b) => a.data.start.valueOf() - b.data.start.valueOf());
 }
 
-export async function getPassage(id: 'constants' | 'contact' | 'work') {
+export async function getPassage(id: 'constants' | 'contact' | 'work' | 'education' | 'skills') {
   const entry = published(await getCollection('passages')).find(e => e.slug === id);
   return entry ? { entry, ...(await entry.render()) } : null;
+}
+
+export async function getExperience() {
+  return (await getCollection('experience')).sort((a, b) => b.data.start.valueOf() - a.data.start.valueOf());
 }
 
 /** First stanza of a poem, as lines, for pull quotes. */

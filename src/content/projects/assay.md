@@ -7,6 +7,7 @@ status: "Local CLI & Rust library"
 order: 3
 featured: true
 date: 2026-09-01
+cvLine: "A rule language for checking LLM evaluation records, built in Rust: lexer, parser with error recovery, static checker and evaluator. Diagnostics point to the sub-expression responsible for a failure, so rule bugs aren't mistaken for model regressions; tested with fixtures and seeded mutation inputs."
 technologies: [Rust, Parsing, Static analysis, JSON]
 ---
 

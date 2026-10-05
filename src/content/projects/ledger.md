@@ -7,6 +7,7 @@ status: "Prototype / Milestone 1"
 order: 2
 featured: true
 date: 2026-09-01
+cvLine: "Imports free-form training spreadsheets: an LLM proposes a mapping, deterministic code applies it, and a review screen shows source cells beside parsed results before anything is written. An AI coach queries the record through typed tools and read-only, user-scoped SQL with a timeout and row cap."
 ongoing: true
 technologies: [TypeScript, Next.js, PostgreSQL, Drizzle, AI SDK, Zod]
 ---
