@@ -1,5 +1,5 @@
 ---
-title: "A Past Is Just One of Many Wholes?"
+title: "A Past Is Just One of Many Wholes"
 subtitle: "Week 1"
 date: 2026-10-04
 tags: ["Growth", "Presence", "Purpose"]
