@@ -6,6 +6,7 @@ import './tokens.css';
 interface Props { title: string; ground: 'split' | 'ink' | 'paper'; page?: 'home' | 'work' | 'almanac' | 'index' | 'about'; description?: string }
 const { title, ground, page, description = 'Louis Adams, a builder and poet. A home for the things I make, the ideas I follow, and the words I write along the way.' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/images/og.jpg', Astro.site).href;
 const links = [
   { href: '/work/', label: 'Work', id: 'work' },
   { href: '/almanac/', label: 'Almanac', id: 'almanac' },
@@ -28,6 +29,10 @@ const links = [
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1135" />
+  <meta property="og:image:height" content="600" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet" />
 </head>

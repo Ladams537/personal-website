@@ -32,6 +32,12 @@ const portrait = existsSync('public/images/portrait.jpg');
       </section>
     )}
 
+    <section class="versions" aria-label="Versions">
+      <img src="/images/version-garden.jpg" alt="Louis laughing in a London garden, a leather jacket pulled over his head" loading="lazy" />
+      <img src="/images/version-cafe.jpg" alt="Louis at a café table in the sun, chin on his hands" loading="lazy" />
+      <img src="/images/version-gardens.jpg" alt="Louis in a white shirt and sunglasses above formal gardens" loading="lazy" />
+    </section>
+
     {rendered.length > 0 && (
       <section class="block seasons">
         <h2>Seasons</h2>
@@ -62,6 +68,9 @@ const portrait = existsSync('public/images/portrait.jpg');
     .about h1 { font: 300 clamp(48px, 9vw, 104px)/.9 var(--serif); letter-spacing: -.035em; margin: 12px 0 18px; font-variation-settings: 'opsz' 144; }
     .about h1 em { color: var(--accent); }
     .intro { font: italic 300 21px/1.5 var(--serif); color: var(--paper-dim); max-width: 46ch; }
+    .versions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 44px; }
+    .versions img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; filter: saturate(.9); transition: filter .3s; }
+    .versions img:hover { filter: none; }
     .block { padding: 36px 0; border-top: 1px solid color-mix(in oklab, var(--paper-fg) 14%, transparent); }
     .block h2 { font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: .14em; color: var(--paper-dim); margin-bottom: 18px; }
     .body { font: 300 20px/1.65 var(--serif); max-width: 60ch; }

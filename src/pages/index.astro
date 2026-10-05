@@ -57,6 +57,7 @@ const thisYear = archive.filter(i => i.year === new Date().getFullYear()).length
         </ul>
         {recordings.length > 0 && (
           <div class="heard">
+            <img src="/images/stage.jpg" alt="Louis performing a poem on stage at Live & Lit" class="stage-photo" loading="lazy" width="900" height="900" />
             <p class="mono">Heard aloud</p>
             <ul>{recordings.map(r => <li><a href={r.href}><span class="play" aria-hidden="true">▶</span>{r.t}</a></li>)}</ul>
           </div>
@@ -168,6 +169,7 @@ const thisYear = archive.filter(i => i.year === new Date().getFullYear()).length
     .cite { display: block; margin-top: 8px; font-size: 15px; color: var(--accent); text-decoration: none; }
     .cite:hover { text-decoration: underline; }
     .heard { margin-top: 32px; padding: 18px 20px; background: color-mix(in oklab, var(--paper-fg) 5%, transparent); border-left: 2px solid var(--accent); }
+    .stage-photo { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 25%; margin-bottom: 14px; }
     .heard .mono { font-size: 10px; color: var(--paper-dim); margin-bottom: 8px; }
     .heard ul { list-style: none; }
     .heard a { display: flex; align-items: center; gap: 12px; padding: 6px 0; font: italic 300 21px var(--serif); text-decoration: none; }
