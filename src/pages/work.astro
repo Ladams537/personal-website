@@ -4,10 +4,12 @@
 import { existsSync } from 'node:fs';
 import { getCollection } from 'astro:content';
 import Layout from '../components/Layout.astro';
-import { getPassage } from '../components/content';
+import { getPassage, getExperience } from '../components/content';
 import { fmtMonth } from '../components/format';
 
 const pitch = await getPassage('work');
+const experience = await Promise.all((await getExperience()).map(async e => ({ e, ...(await e.render()) })));
+const span = (s: Date, e?: Date) => `${fmtMonth(s.toISOString().slice(0, 10))} – ${e ? fmtMonth(e.toISOString().slice(0, 10)) : 'present'}`;
 const contact = await getPassage('contact');
 const projects = (await getCollection('projects')).sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0));
 const when = (d?: Date, ongoing = false) => (d ? fmtMonth(d.toISOString().slice(0, 10)) + (ongoing ? ' – present' : '') : '');
@@ -31,6 +33,20 @@ const stack = [...new Set(projects.flatMap(p => p.data.technologies))];
       </p>
     </header>
 
+    <section class="experience" aria-label="Experience">
+      <h2 class="sec mono">Experience</h2>
+      {experience.map(({ e, Content }) => (
+        <article class="role">
+          <p class="role-when mono">{span(e.data.start, e.data.end)}</p>
+          <div>
+            <h3>{e.data.org} <span>· {e.data.role}</span></h3>
+            <div class="role-body"><Content /></div>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <h2 class="sec mono">Projects</h2>
     <section class="projects" aria-label="Projects">
       {projects.map((p, i) => (
         <article class="proj">
@@ -76,7 +92,17 @@ const stack = [...new Set(projects.flatMap(p => p.data.technologies))];
     .btn:hover { filter: brightness(1.1); }
     .btn.ghost { background: none; color: var(--ink-fg); border: 1px solid color-mix(in oklab, var(--ink-fg) 30%, transparent); }
 
-    .projects { margin-top: 72px; border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .sec { font-size: 11px; text-transform: uppercase; letter-spacing: .16em; color: var(--ink-dim); margin: 72px 0 6px; font-weight: 400; }
+    .experience { border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .role { display: grid; grid-template-columns: 200px 1fr; gap: 16px; padding: 26px 0; border-bottom: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
+    .role-when { font-size: 11px; color: var(--ink-dim); padding-top: 6px; }
+    .role h3 { font: 600 22px/1.2 var(--mono); letter-spacing: -.02em; }
+    .role h3 span { font-weight: 400; color: var(--ink-dim); font-size: 16px; }
+    .role-body { font: 300 18px/1.55 var(--serif); margin-top: 8px; max-width: 64ch; }
+    .role-body ul { list-style: none; }
+    .role-body li { position: relative; padding-left: 18px; margin-top: 8px; }
+    .role-body li::before { content: '—'; position: absolute; left: 0; color: var(--accent); }
+    .projects { border-top: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
     .proj { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 30px 0; border-bottom: 1px solid color-mix(in oklab, var(--ink-fg) 15%, transparent); }
     .proj-n { color: var(--ink-dim); padding-top: 8px; }
     .proj h2 { font: 600 28px/1.15 var(--mono); letter-spacing: -.03em; }
@@ -93,6 +119,7 @@ const stack = [...new Set(projects.flatMap(p => p.data.technologies))];
     .contact ul { list-style: none; margin: 10px 0 14px; }
     .contact li { padding: 4px 0; border-bottom: 1px dashed color-mix(in oklab, var(--ink-fg) 15%, transparent); }
     .contact a { color: var(--accent); }
+    @media (max-width: 760px) { .role { grid-template-columns: 1fr; gap: 4px; } }
     @media (max-width: 760px) { .aside-grid { grid-template-columns: 1fr; } .proj { grid-template-columns: 1fr; gap: 4px; } }
   </style>
 </Layout>

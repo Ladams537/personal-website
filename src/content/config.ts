@@ -44,6 +44,8 @@ const projects = defineCollection({
     // Public source and a running version, when they exist.
     repo: z.string().url().optional(),
     live: z.string().url().optional(),
+    // One line for the CV's Projects section; projects without it are left off the CV.
+    cvLine: z.string().optional(),
   }),
 });
 
@@ -72,4 +74,15 @@ const passages = defineCollection({
   schema: z.object({ title: z.string(), draft }),
 });
 
-export const collections = { poetry, reflections, essays, projects, seasons, passages };
+// Roles, newest first by `start`. The body is the bullet list shown on /work/ and the CV.
+const experience = defineCollection({
+  type: 'content',
+  schema: z.object({
+    org: z.string(),
+    role: z.string(),
+    start: z.date(),
+    end: z.date().optional(),
+  }),
+});
+
+export const collections = { poetry, reflections, essays, projects, seasons, passages, experience };

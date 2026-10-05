@@ -7,6 +7,7 @@ status: "Learning project"
 order: 1
 featured: true
 date: 2026-05-01
+cvLine: "Event listings, RSVPs and recommendations from shared attendance, ranked in SQL; SvelteKit, Hono and shared Zod schemas, with rotating refresh tokens and end-to-end API tests."
 repo: https://github.com/Ladams537/poetry-events-platform
 technologies:
   - TypeScript

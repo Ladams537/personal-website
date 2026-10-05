@@ -7,6 +7,7 @@ status: "Interactive prototype"
 order: 4
 featured: true
 date: 2026-06-01
+cvLine: "A noir interrogation game: structured case generation (suspects, evidence, hidden truth) grounds streamed, in-character interviews, with history and presented evidence tracked per suspect."
 repo: https://github.com/Ladams537/cold-case
 technologies: [TypeScript, Next.js, React, AI SDK, Zod]
 ---
