@@ -1,6 +1,7 @@
 ---
 title: "Unwelcome Hope"
-date: 2026-07-16
+date: 2026-01-01
+excerpt: "On an earth that keeps turning regardless."
 tags: ["Loss", "Hope"]
 ---
 
