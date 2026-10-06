@@ -8,8 +8,8 @@ I've sought sunsets through my life.
 Thinking that if I 
 Changed my body, my education, 
 My social standing: 
-That I'd fit in. 
-Never changed my perception though. 
+That I'd see them. 
+Never changed my perception. 
 Not able to see
 That those who stood
 By me when there was no reason to
@@ -25,22 +25,11 @@ We've outgrown each other, but never know
 Which seeds we planted in others will grow
 Into trees.
 
-One I'll never forget is all the arguments
-About the contents of a cup. 
-They think that cup is half-full. 
-Nah, my brotha, that cup is half-empty.
-I'd be debating, getting frustrated
-Convincing them my way is the right way.
-It took days, okay months, to see clearly 
-That maybe they were just like me 
-When they called me crazy. 
-But you didn't hear me say that here.
-
 There is no better sunset 
 Than the sunset 
 You see in hindsight. 
 Solving problems instead of being present
-Stealing from time it's only present: connection. 
+Stealing from time its only present: connection. 
 These strangers with memories
 Are the ones who moulded me 
 Making me play the fool 
@@ -53,16 +42,17 @@ For starting a fight over text
 Instead of waiting for the subtext
 Which comes from being next to him.
 Like pointing out to my girl
-Her issues, through my eyes,
+Her imperfections, through my eyes,
 Trying to fix her
 To mask the pricks of inadequacy
-That flickered inside of my mind.
+That flickered inside my mind.
+But you didn't hear me admit that here.
 
-There only so many times
+There are only so many times
 You can leave people by the wayside
 Before the wayside becomes a graveyard.
 Despite their soft words of encouragement
-Being there in the loneliness of night.
+Being there in the loneliness of the night.
 Despite telling me I'd be alright
 Holding me close, giving up their time.
 Despite a sky collapsing into cloud, 
@@ -83,8 +73,8 @@ Strangers I'd once known,
 Skins I'd shed by the wayside.
 Love. I'd never forget.
 
-I was left by myself.
-Hiding from my worst fear: me. 
+I hid from my 
+Worst fear: me. 
 No me in the gym. 
 No me behind my brain. 
 No me with company.
@@ -112,10 +102,9 @@ Even if they have to drag me out.
 Or the magic 
 When the lights go low.
 My heart-rate blurs
-With the sound of music
-Drowning in the background beat
+Drowning in the beat
 As I dance like a ballerina
-While my friends who love me
+While my friends
 Laugh with, or more likely at me.
 I could be me wherever I took me.
 
@@ -128,11 +117,12 @@ To become
 Me.
 Not me thinking that I was alone --
 Not me longing for someone long gone -- 
-Not me wishing to be someone
-Other than he who I was born to be.
+Not me wishing to be a someone.
 
-I still go back to the gravestones
-On occasion, where my memories belong.
+I still go back though…
+
+I still go back to the graveyard on occasion,
+Where my memories belong.
 I turn on the song, 
 Only I can hear
 Understanding, I might be 
@@ -141,12 +131,12 @@ Standing in this place.
 I have passed ghosts, wishing
 To be selfish, 
 To resurrect them 
-To be made flesh. 
-They politely decline my invitation, 
-Having found another person 
+To make them flesh. 
+They politely decline.
+They found another 
 To carry them.
 
-A memory just told me
+A ghost just told me
 "Look up, 
 Look beyond this place."
 I take my eyes off the carved stone,

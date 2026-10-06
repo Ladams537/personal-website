@@ -23,18 +23,17 @@ I already miss.
 She squeezes me,
 I'd be surprised
 by her strength,
-but I think
+but
 we're drawing
 from each other.
 
 I let go 
 of the softest
 sandpaper I ever
-held -- I turn, --
+held -- I turn --
 and I wish
-I did not look back,
-but I could not resist
-one last look
+I did not look back.
+One last look
 at her now full eyes:
 
 this was the loveliest

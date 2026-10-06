@@ -8,8 +8,7 @@ excerpt: "Memory as a haunting."
 I lift my hand, it grows heavy,
 a lighthouse for lasting ghosts.
 Split: warm and dry--cold and sweaty,
-clench my fist, shorten my reach,
-prepare for battle with my memories.
+clench my fist, shorten my reach.
 
 A shivering face, a speeding heart,
 I'm warm in their cold embrace.
@@ -18,4 +17,4 @@ mixing truth and myth in the story
 I had once written.
 
 Alone with a great imagination
-exacting its toll: condemnation.
+exacting its toll: a sunken stomach.
