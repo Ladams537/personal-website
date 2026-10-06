@@ -55,7 +55,7 @@ To walk by the flower shop
 That I used to go to.
 Sometimes I worry they'll recognise me
 And ask, "Why haven't you been back?"
-Before walking down a long stretch of road
+Before I walk down a long stretch of road
 To Wilson House
 Where you nursed me back to health
 Got sick yourself
