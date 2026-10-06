@@ -1,6 +1,7 @@
 ---
 title: "A Year On"
-date: 2026-10-06
+date: 2026-03-01
+excerpt: "Pain, happiness, and the love that outlasts them."
 tags: ["Loss", "Memory", "Romance"]
 ---
 
