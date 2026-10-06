@@ -57,6 +57,7 @@ const portrait = existsSync('public/images/portrait.jpg');
       <h2>{contact?.entry.data.title ?? 'Get in touch'}{contact?.entry.data.draft && <span class="draft-badge">draft</span>}</h2>
       {contact && <div class="body"><contact.Content /></div>}
       <p class="mail"><a href="mailto:louistadams3@gmail.com">louistadams3@gmail.com ↗</a></p>
+      <p class="mail"><a href="https://lta1904.substack.com/subscribe">Weekly reflections by email ↗</a></p>
     </section>
   </main>
 
@@ -86,6 +87,7 @@ const portrait = existsSync('public/images/portrait.jpg');
     .read, .mail a { color: var(--accent); font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: .08em; text-decoration: none; }
     .read:hover, .mail a:hover { text-decoration: underline; }
     .mail { margin-top: 18px; }
+    .mail + .mail { margin-top: 8px; }
     @media (max-width: 640px) { .about-head { flex-direction: column; align-items: flex-start; } .portrait { width: 60%; } }
   </style>
 </Layout>
