@@ -1,16 +1,16 @@
 ---
-title: "Walking Through Margavine"
+title: "Walking Through Margravine"
 date: 2026-01-16
 tags: ["Gratitude", "Loss", "Debt", "Identity"]
 excerpt: "Paying it forward."
 ---
 
 <figure>
-  <video controls playsinline preload="metadata" aria-label="Walking Through Margavine — poetry recording">
-    <source src="/media/walking-through-margavine.mp4" type="video/mp4" />
-    <a href="/media/walking-through-margavine.mp4">Download the recording.</a>
+  <video controls playsinline preload="metadata" aria-label="Walking Through Margravine — poetry recording">
+    <source src="/media/walking-through-margravine.mp4" type="video/mp4" />
+    <a href="/media/walking-through-margravine.mp4">Download the recording.</a>
   </video>
-  <figcaption>Walking Through Margavine — a recording.</figcaption>
+  <figcaption>Walking Through Margravine — a recording.</figcaption>
 </figure>
 
 Walking through Margravine,
