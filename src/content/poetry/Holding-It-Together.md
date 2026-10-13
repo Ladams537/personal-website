@@ -1,7 +1,8 @@
 ---
 title: "Holding It Together"
 date: 2026-03-25
-tags: ["Wit", "Suffering", "Identity"]
+tags: ["Suffering", "Identity"]
+tone: ["Wit"]
 excerpt: "On being the piece that holds — until it doesn't."
 ---
 

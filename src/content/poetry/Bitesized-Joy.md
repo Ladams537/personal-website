@@ -1,7 +1,8 @@
 ---
 title: "Bitesized Joy"
 date: 2026-03-27
-tags: ["Observation", "Wit"]
+tags: ["World", "Hope"]
+tone: ["Wit"]
 excerpt: "Pleasure, and its limit."
 ---
 

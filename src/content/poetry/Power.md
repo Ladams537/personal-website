@@ -1,7 +1,8 @@
 ---
 title: "Power"
 date: 2026-02-20
-tags: ["Identity", "Reflection", "Growth"]
+tags: ["Identity", "Growth"]
+tone: ["Defiant"]
 excerpt: "Battle with younger self."
 ---
 Good to see you still sit behind 

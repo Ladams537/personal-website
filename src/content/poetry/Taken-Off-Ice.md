@@ -1,7 +1,8 @@
 ---
 title: "Taken Off Ice"
 date: 2026-03-07
-tags: ["Suffering", "Endurance", "Physicality"]
+tags: ["Suffering", "Growth"]
+tone: ["Sensual"]
 excerpt: "On surrendering to intensity."
 ---
 

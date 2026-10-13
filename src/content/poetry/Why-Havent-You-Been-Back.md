@@ -1,7 +1,8 @@
 ---
 title: "Why Haven't You Been Back?"
 date: 2026-04-02
-tags: ["Romance", "Loss", "Memory", "Longing"]
+tags: ["Love", "Loss", "Memory"]
+tone: ["Longing"]
 excerpt: "A walk through streets that belong to someone else now."
 ---
 

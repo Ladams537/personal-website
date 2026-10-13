@@ -1,7 +1,8 @@
 ---
 title: "Bulgaria"
 date: 2025-11-28
-tags: ["Work", "Insight", "Identity", "Growth", "Connection"]
+tags: ["Growth", "Identity", "World"]
+tone: ["Contemplative"]
 excerpt: "Work trip."
 ---
 Lacking excitement a plane I boarded,

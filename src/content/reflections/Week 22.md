@@ -2,7 +2,8 @@
 title: "Days and Years"
 subtitle: "Week 22"
 date: 2026-01-25
-tags: ["Discipline", "Routine"]
+tags: ["Growth"]
+tone: ["Contemplative"]
 ---
 
 Some years pass by and are remembered for days. Some days pass by and are remembered for years.

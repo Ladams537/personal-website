@@ -2,7 +2,8 @@
 title: "The Pleasure of Sorrow"
 subtitle: "Week 1"
 date: 2025-08-17
-tags: ["Identity", "Reflection"]
+tags: ["Identity"]
+tone: ["Contemplative"]
 ---
 
 “You came to me to learn the Pleasure of Life and the Pleasure of Art. Perhaps I am chosen to teach you something much more wonderful, the meaning of Sorrow and its beauty.” – Oscar Wilde

@@ -2,7 +2,8 @@
 title: "Packing Boxes"
 subtitle: "Week 2"
 date: 2026-10-11
-tags: ["Change", "Identity", "Growth"]
+tags: ["Growth", "Identity"]
+tone: ["Contemplative"]
 ---
 
 The act of being stretched is where we meet our maker.

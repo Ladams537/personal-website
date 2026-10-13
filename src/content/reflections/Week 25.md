@@ -2,7 +2,8 @@
 title: "Unenlisted"
 subtitle: "Week 25"
 date: 2026-02-15
-tags: ["Identity", "Conformity"]
+tags: ["Identity"]
+tone: ["Contemplative"]
 ---
 
 I didn't enlist. None of us do at that age. Other people pinned the badges on before I could read what they said.

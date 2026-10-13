@@ -1,7 +1,8 @@
 ---
 title: "He Looked Like A Mess"
 date: 2026-03-01
-tags: ["Prose", "Suffering", "Hope"]
+tags: ["Suffering", "Hope"]
+tone: ["Cathartic"]
 excerpt: "A week of breaking down and holding on."
 ---
 

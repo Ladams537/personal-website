@@ -1,7 +1,8 @@
 ---
 title: "Trees"
 date: 2026-02-01
-tags: ["Community", "Loneliness", "Connection"]
+tags: ["Belonging", "Suffering", "World"]
+tone: ["Contemplative"]
 excerpt: "Loneliness in a connected world."
 ---
 Trees mock us. We see them spread across the hill

@@ -1,7 +1,8 @@
 ---
 title: "The Last Time"
 date: 2026-03-19
-tags: ["Romance", "Hope", "Loss"]
+tags: ["Love", "Hope", "Loss"]
+tone: ["Tender"]
 excerpt: "A farewell that doesn't know itself."
 ---
 

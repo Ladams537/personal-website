@@ -2,7 +2,8 @@
 title: "Living the Dream"
 subtitle: "Week 21"
 date: 2026-01-18
-tags: ["Gratitude", "Ambition"]
+tags: ["Hope", "Growth"]
+tone: ["Contemplative"]
 ---
 
 As I navigated the rush of central London this week, moving from my first week back at work to dinners featuring a global map of cuisines, then retreating to the quiet of my desk to write poetry—I noticed:

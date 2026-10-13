@@ -1,7 +1,8 @@
 ---
 title: "Ghost Story"
 date: 2026-03-18
-tags: ["Detangling", "Memory", "Suffering"]
+tags: ["Memory", "Suffering"]
+tone: ["Cathartic"]
 excerpt: "Memory as a haunting."
 ---
 

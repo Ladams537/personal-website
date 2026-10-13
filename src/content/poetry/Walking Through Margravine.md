@@ -1,7 +1,8 @@
 ---
 title: "Walking Through Margravine"
 date: 2026-01-16
-tags: ["Gratitude", "Loss", "Debt", "Identity"]
+tags: ["Hope", "Loss", "Identity"]
+tone: ["Tender"]
 excerpt: "Paying it forward."
 ---
 

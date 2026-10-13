@@ -2,6 +2,8 @@
 title: "Renovations"
 subtitle: "Week 30"
 date: 2026-03-22
+tags: ["Identity", "Growth"]
+tone: ["Contemplative"]
 ---
 
 Hallways of my house.

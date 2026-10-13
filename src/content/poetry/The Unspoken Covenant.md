@@ -1,7 +1,8 @@
 ---
 title: "The Unspoken Covenant"
 date: 2026-01-26
-tags: ["Free-thinking", "Tribes", "Identity"]
+tags: ["Identity", "Belonging"]
+tone: ["Defiant"]
 excerpt: "Suppression of thoughts."
 ---
 Told that through my birth, life will be easy,

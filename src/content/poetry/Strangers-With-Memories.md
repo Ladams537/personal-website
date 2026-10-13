@@ -1,7 +1,8 @@
 ---
 title: "Strangers With Memories"
 date: 2026-03-31
-tags: ["Memory", "Loss", "Growth", "Community"]
+tags: ["Memory", "Loss", "Growth"]
+tone: ["Elegiac"]
 excerpt: "On the people who moulded you before they became strangers again."
 ---
 I've sought sunsets through my life. 

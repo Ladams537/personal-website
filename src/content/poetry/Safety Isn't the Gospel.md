@@ -1,7 +1,8 @@
 ---
 title: "Safety Isn't the Gospel"
 date: 2026-02-06
-tags: ["Romance", "Eros", "Longing", "Faith", "Loss"]
+tags: ["Love", "Faith", "Loss"]
+tone: ["Sensual"]
 excerpt: "Rebellious love."
 ---
 

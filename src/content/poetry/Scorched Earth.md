@@ -1,7 +1,8 @@
 ---
 title: "Scorched Earth"
 date: 2026-02-03
-tags: ["Household", "Games", "Morality", "Regret", "Identity"]
+tags: ["Loss", "Identity", "Belonging"]
+tone: ["Cathartic"]
 excerpt: "A safe, intense picture of modernity."
 ---
 

@@ -1,7 +1,8 @@
 ---
 title: "A Part From"
 date: 2026-03-24
-tags: ["Romance", "Loss", "Memory"]
+tags: ["Love", "Loss", "Memory"]
+tone: ["Longing"]
 excerpt: "The ghost of Hope on a stranger's face."
 ---
 

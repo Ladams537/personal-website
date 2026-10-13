@@ -2,7 +2,8 @@
 title: "The Weight of Ambition"
 subtitle: "Week 23"
 date: 2026-02-01
-tags: ["Ambition", "Presence"]
+tags: ["Growth"]
+tone: ["Contemplative"]
 ---
 
 The weight a man carries is proportionate to the distance between where he is and where he knows he can be.

@@ -1,8 +1,9 @@
 ---
 title: "Unwelcome Hope"
 date: 2026-01-01
-excerpt: "On an earth that keeps turning regardless."
 tags: ["Loss", "Hope"]
+tone: ["Elegiac"]
+excerpt: "On an earth that keeps turning regardless."
 ---
 
 Anaesthetic marinates me with

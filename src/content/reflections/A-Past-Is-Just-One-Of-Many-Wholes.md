@@ -2,7 +2,8 @@
 title: "A Past Is Just One of Many Wholes"
 subtitle: "Week 1"
 date: 2026-10-04
-tags: ["Growth", "Presence", "Purpose"]
+tags: ["Growth", "Identity"]
+tone: ["Contemplative"]
 ---
 
 Time leaves us little choice but to act. 

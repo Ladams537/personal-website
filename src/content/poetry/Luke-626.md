@@ -1,7 +1,8 @@
 ---
 title: "Luke 6:26"
 date: 2026-03-20
-tags: ["Identity", "Observation", "Modernity"]
+tags: ["Faith", "Identity", "World"]
+tone: ["Satirical"]
 excerpt: "The city's clean face and what runs beneath."
 ---
 

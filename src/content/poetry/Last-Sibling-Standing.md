@@ -1,7 +1,8 @@
 ---
 title: "Last Sibling Standing"
 date: 2026-03-25
-tags: ["Loss", "Memory", "Faith", "Family"]
+tags: ["Loss", "Memory", "Faith"]
+tone: ["Elegiac"]
 excerpt: "The loneliness of outliving everyone who knew you."
 ---
 

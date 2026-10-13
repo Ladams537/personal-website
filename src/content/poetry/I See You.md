@@ -1,7 +1,8 @@
 ---
 title: "I See You"
 date: 2026-02-14
-tags: ["Romance", "Loss", "Love", "Memory"]
+tags: ["Love", "Loss", "Memory"]
+tone: ["Tender"]
 excerpt: "Reminiscing, wrestling, ruminating."
 ---
 I see you. 

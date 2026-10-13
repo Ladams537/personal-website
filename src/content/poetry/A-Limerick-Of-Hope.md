@@ -1,7 +1,8 @@
 ---
 title: "Limericks of Hope"
 date: 2026-01-23
-tags: ["Romance", "Cathartic", "Loss", "Faith", "Identity"]
+tags: ["Love", "Loss", "Faith"]
+tone: ["Wit", "Cathartic"]
 excerpt: "Five limericks tracing love, faith, and letting go."
 ---
 

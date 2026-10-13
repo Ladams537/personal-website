@@ -2,7 +2,8 @@
 title: "The Elegance of Culture"
 subtitle: "Week 20"
 date: 2026-01-11
-tags: ["Travel", "Solitude"]
+tags: ["World", "Identity"]
+tone: ["Contemplative"]
 ---
 
 Culture is elegant. An encapsulation of many factors.

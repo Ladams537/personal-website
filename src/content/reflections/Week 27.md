@@ -3,6 +3,7 @@ title: "Pain as a Teacher"
 subtitle: "Week 27"
 date: 2026-03-01
 tags: ["Suffering", "Growth"]
+tone: ["Contemplative"]
 ---
 
 Pain is nature's most effective teacher.

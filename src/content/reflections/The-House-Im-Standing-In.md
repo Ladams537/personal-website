@@ -2,6 +2,8 @@
 title: "The House I'm Standing In"
 subtitle: "Week 31"
 date: 2026-03-29
+tags: ["Belonging", "Growth"]
+tone: ["Contemplative"]
 ---
 
 Speaking to old, but close friends, is like going back to your childhood home: you feel at home, but you know it's a different home from where you now live.

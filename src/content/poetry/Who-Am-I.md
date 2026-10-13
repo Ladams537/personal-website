@@ -1,7 +1,8 @@
 ---
 title: "Who Am I?"
-tags: ["Identity", "Irish", "Belonging"]
 date: 2026-03-22
+tags: ["Identity", "Belonging"]
+tone: ["Wit"]
 excerpt: "Too Irish for some, too British for others."
 ---
 

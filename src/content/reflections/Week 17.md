@@ -2,7 +2,8 @@
 title: "Back to the Starting Line"
 subtitle: "Week 17"
 date: 2025-12-21
-tags: ["Journey", "Growth"]
+tags: ["Growth"]
+tone: ["Contemplative"]
 ---
 
 History is full of moments that appear small in the wake but prove instrumental to the route you sail.

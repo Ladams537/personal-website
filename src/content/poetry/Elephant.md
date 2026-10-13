@@ -1,7 +1,8 @@
 ---
 title: "Elephant"
 date: 2026-03-31
-tags: ["Observation", "Wit", "Satire"]
+tags: ["World"]
+tone: ["Satirical"]
 excerpt: "On the elephants everyone sees and no one addresses."
 ---
 

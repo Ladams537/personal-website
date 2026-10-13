@@ -2,7 +2,8 @@
 title: "The Predictable Unbearable"
 subtitle: "Week 24"
 date: 2026-02-08
-tags: ["Agency", "Change"]
+tags: ["Identity", "Growth"]
+tone: ["Contemplative"]
 ---
 
 Beyond a certain point, even the unbearable becomes bearable—provided it is predictable.
