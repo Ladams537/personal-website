@@ -2,7 +2,7 @@
 title: "Days and Years"
 subtitle: "Week 22"
 date: 2026-01-25
-tags: ["Growth"]
+tags: ["Growth", "Identity", "Love"]
 tone: ["Contemplative"]
 ---
 

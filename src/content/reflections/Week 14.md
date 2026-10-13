@@ -2,8 +2,8 @@
 title: "Walking Into Dark Rooms"
 subtitle: "Week 14"
 date: 2025-11-30
-tags: ["Identity", "Growth"]
-tone: ["Contemplative"]
+tags: ["Growth", "Suffering", "Loss"]
+tone: ["Defiant"]
 ---
 
 Life demands we look forward, but looking back is seductive. The past is safe; it has a fixed quality—an outcome we already know. The future is just a dark room we have to walk into.

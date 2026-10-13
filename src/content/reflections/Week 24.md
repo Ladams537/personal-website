@@ -2,7 +2,7 @@
 title: "The Predictable Unbearable"
 subtitle: "Week 24"
 date: 2026-02-08
-tags: ["Identity", "Growth"]
+tags: ["Suffering", "Growth", "Faith"]
 tone: ["Contemplative"]
 ---
 

@@ -2,7 +2,7 @@
 title: "Dragons and Princesses"
 subtitle: "Week 9"
 date: 2025-10-26
-tags: ["Identity"]
+tags: ["Identity", "Growth", "Faith"]
 tone: ["Contemplative"]
 ---
 

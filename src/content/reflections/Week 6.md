@@ -2,8 +2,8 @@
 title: "Exactly Where I Need to Be"
 subtitle: "Week 6"
 date: 2025-10-05
-tags: ["Growth", "Identity"]
-tone: ["Contemplative"]
+tags: ["Growth", "Identity", "Hope"]
+tone: ["Defiant", "Contemplative"]
 ---
 
 I am exactly where I need to be.

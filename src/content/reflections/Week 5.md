@@ -2,8 +2,8 @@
 title: "Gutters and Stars"
 subtitle: "Week 5"
 date: 2025-09-28
-tags: ["Identity", "Suffering"]
-tone: ["Contemplative"]
+tags: ["Suffering", "Identity", "World"]
+tone: ["Contemplative", "Defiant"]
 ---
 
 I’ve always carried the quiet conviction that I am special, a main character. Today I don’t know if this is cliché, laudable, or embarrassing to admit. It’s an internal engine of confidence, a belief that things will eventually work out in my favour regardless of my actions—the very root of many a day procrastinated away. Yet, the evidence argues otherwise. There are piles of missed opportunities, of harsh words, of forgiving too easily. In short, piles of failure. Within these failures, however, lie the hard-won lessons on which I now try to balance my life, the principles on which I try to understand myself.

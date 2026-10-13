@@ -2,7 +2,7 @@
 title: "The Pleasure of Sorrow"
 subtitle: "Week 1"
 date: 2025-08-17
-tags: ["Identity"]
+tags: ["Suffering", "Loss", "Hope"]
 tone: ["Contemplative"]
 ---
 
