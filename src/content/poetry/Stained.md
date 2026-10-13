@@ -1,7 +1,8 @@
 ---
 title: "Stained"
 date: 2026-03-22
-tags: ["Observation", "Memory", "Solitude"]
+tags: ["Memory", "World", "Identity"]
+tone: ["Contemplative"]
 excerpt: "Morning rituals and the marks they leave."
 ---
 

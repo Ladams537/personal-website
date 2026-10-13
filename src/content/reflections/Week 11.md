@@ -2,7 +2,8 @@
 title: "Lest We Forget"
 subtitle: "Week 11"
 date: 2025-11-09
-tags: ["Memory", "History"]
+tags: ["Memory", "World"]
+tone: ["Elegiac"]
 ---
 
 "History, despite its wrenching pain, cannot be unlived, but if faced with courage, need not be lived again." - Maya Angelou

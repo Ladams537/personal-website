@@ -1,7 +1,8 @@
 ---
 title: "Beautiful Pigeons"
 date: 2026-03-31
-tags: ["Comedy", "Romance", "Identity"]
+tags: ["Love", "Identity"]
+tone: ["Wit"]
 excerpt: "On looking everywhere but where you want to look."
 ---
 

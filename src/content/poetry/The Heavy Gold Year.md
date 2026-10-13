@@ -1,7 +1,8 @@
 ---
 title: "The Heavy Gold Year"
 date: 2025-12-27
-tags: ["Memory", "Community", "Burdens", "Resilience", "Growth"]
+tags: ["Memory", "Belonging", "Growth"]
+tone: ["Longing"]
 excerpt: "Recounting 2025 as a year."
 ---
 One little house sits by the sea, 

@@ -1,7 +1,8 @@
 ---
 title: "Tight Turnovers"
 date: 2026-04-01
-tags: ["Wit", "Satire", "Modernity", "Comedy"]
+tags: ["World"]
+tone: ["Satirical"]
 excerpt: "RyanAir goes interplanetary. Nothing changes."
 ---
 

@@ -2,7 +2,8 @@
 title: "Thirty-Eight Years"
 subtitle: "Week 28"
 date: 2026-03-08
-tags: ["Purpose", "Grace"]
+tags: ["Identity", "Faith"]
+tone: ["Contemplative"]
 ---
 
 There is a story about a man who lay beside a pool for thirty-eight years.

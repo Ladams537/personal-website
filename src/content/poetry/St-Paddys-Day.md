@@ -1,7 +1,8 @@
 ---
 title: "St Paddy's Day"
 date: 2026-03-20
-tags: ["Relationship", "Cathartic", "Memory", "Irish"]
+tags: ["Love", "Memory", "Belonging"]
+tone: ["Wit"]
 excerpt: "The wrong encounter on the right day."
 ---
 

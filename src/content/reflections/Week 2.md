@@ -3,6 +3,7 @@ title: "Living Forwards"
 subtitle: "Week 2"
 date: 2025-09-07
 tags: ["Memory", "Growth"]
+tone: ["Contemplative"]
 ---
 
 Søren Kierkegaard wrote that “Life can only be understood backwards; but it must be lived forwards,” and this past week felt like a perfect, chaotic proof of that idea. It was a rollercoaster. For the first time in four years, I celebrated Anish's birthday—a moment of pure, forward-living joy. I even got drunk for the first time, another leap into the unknown (followed by a hangover that provided some painful, backward-facing clarity). The week was a blur of highs and lows, of sharp focus and heavy fog, a reminder that life doesn’t wait for us to make sense of it.

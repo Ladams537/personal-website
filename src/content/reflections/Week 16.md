@@ -2,7 +2,8 @@
 title: "An Unreasonable Poem"
 subtitle: "Week 16"
 date: 2025-12-14
-tags: ["Poetry", "Vulnerability"]
+tags: ["Suffering", "Identity"]
+tone: ["Contemplative"]
 ---
 
 I did my first poetry event this week. I shared an unreasonable poem.

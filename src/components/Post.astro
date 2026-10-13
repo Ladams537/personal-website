@@ -12,6 +12,7 @@ interface Props {
   eyebrow?: string;
   lede?: string;
   tags?: string[];
+  tone?: string[];
   status?: string;
   prev?: Link | null;
   next?: Link | null;
@@ -20,7 +21,7 @@ interface Props {
   /** Raw markdown, used for the reading-time estimate. */
   body?: string;
 }
-const { kind, title, date, eyebrow, lede, tags = [], status, prev, next, when, body = '' } = Astro.props;
+const { kind, title, date, eyebrow, lede, tags = [], tone = [], status, prev, next, when, body = '' } = Astro.props;
 const ground = kind === 'project' ? 'ink' : 'paper';
 const iso = date?.toISOString().slice(0, 10);
 const words = kind === 'poem' ? 0 : body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
@@ -39,7 +40,7 @@ const minutes = Math.max(1, Math.round(words / 230));
         {status && <span>{status}</span>}
         {kind !== 'poem' && words > 0 && <span>{minutes} min read</span>}
       </p>
-      {tags.length > 0 && <p class="post-tags">{tags.map(t => <span>{t}</span>)}</p>}
+      {(tags.length > 0 || tone.length > 0) && <p class="post-tags">{tags.map(t => <span>{t}</span>)}{tone.map(t => <span class="tone">{t.toLowerCase()}</span>)}</p>}
     </header>
 
     <article class:list={[kind === 'poem' ? 'verse' : 'prose']}>
@@ -68,6 +69,7 @@ const minutes = Math.max(1, Math.round(words / 230));
     .post-meta a { color: var(--accent); text-decoration: none; } .post-meta a:hover { text-decoration: underline; }
     .post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
     .post-tags span { font: 400 11px var(--mono); border: 1px solid var(--rule); padding: 3px 8px; color: var(--dim); }
+    .post-tags .tone { border-color: transparent; font-style: italic; padding-inline: 2px; }
 
     .verse { font: 300 23px/1.65 var(--serif); }
     .verse p { margin-bottom: 1.3em; }

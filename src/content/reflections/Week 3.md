@@ -2,7 +2,8 @@
 title: "The Embarrassment of Growth"
 subtitle: "Week 3"
 date: 2025-09-14
-tags: ["Growth", "Conviction"]
+tags: ["Growth", "Identity"]
+tone: ["Contemplative"]
 ---
 
 "So much of what people call 'conviction' is actually a wilful disregard for facts that might change their minds." — Morgan Housel

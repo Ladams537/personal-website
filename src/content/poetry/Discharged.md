@@ -1,7 +1,8 @@
 ---
 title: "Discharged"
 date: 2026-04-02
-tags: ["Romance", "Eros", "Wit"]
+tags: ["Love"]
+tone: ["Sensual", "Wit"]
 excerpt: "Intimacy as insolvency proceedings."
 ---
 

@@ -2,7 +2,8 @@
 title: "Small Acts of Defiance"
 subtitle: "Week 4"
 date: 2025-09-21
-tags: ["Rebirth", "Presence"]
+tags: ["Faith", "Growth"]
+tone: ["Defiant"]
 ---
 
 A TfL worker was wishing everyone good morning, and the simplicity of his attempt to spread joy struck me. It felt like a small act of defiance against a world that insists joy is only permitted when they deem the moment significant enough.

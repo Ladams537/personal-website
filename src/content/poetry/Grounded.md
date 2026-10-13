@@ -2,6 +2,7 @@
 title: "Grounded"
 date: 2026-03-23
 tags: ["Identity", "Loss", "Growth"]
+tone: ["Elegiac"]
 excerpt: "On wings sized for the boy you've outgrown."
 ---
 

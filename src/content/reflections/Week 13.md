@@ -2,7 +2,8 @@
 title: "Heroes and Villains"
 subtitle: "Week 13"
 date: 2025-11-23
-tags: ["Perspective", "Trauma"]
+tags: ["World", "Suffering"]
+tone: ["Contemplative"]
 ---
 
 "The world breaks everyone," Hemingway wrote, "and afterward many are strong at the broken places."

@@ -1,7 +1,8 @@
 ---
 title: "Judgement"
 date: 2026-02-08
-tags: ["Intuition", "Identity", "Morality"]
+tags: ["Identity", "Faith"]
+tone: ["Contemplative"]
 excerpt: "How do we decide what to do?"
 ---
 Pretty ladies make me so lose it, 

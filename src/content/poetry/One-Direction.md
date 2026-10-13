@@ -1,7 +1,8 @@
 ---
 title: "One Direction"
 date: 2026-03-26
-tags: ["Romance", "Identity"]
+tags: ["Love", "Identity"]
+tone: ["Tender"]
 excerpt: "On love as a direction you can't unlearn."
 ---
 

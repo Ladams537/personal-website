@@ -1,7 +1,8 @@
 ---
 title: "Fading Stars"
 date: 2026-03-21
-tags: ["Beauty", "Observation", "Modernity"]
+tags: ["Hope", "World"]
+tone: ["Contemplative"]
 excerpt: "On what we stop looking up for."
 ---
 

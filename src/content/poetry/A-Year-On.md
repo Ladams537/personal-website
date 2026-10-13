@@ -1,8 +1,9 @@
 ---
 title: "A Year On"
 date: 2026-03-01
+tags: ["Loss", "Memory", "Love"]
+tone: ["Elegiac"]
 excerpt: "Pain, happiness, and the love that outlasts them."
-tags: ["Loss", "Memory", "Romance"]
 ---
 
 Pain finds me

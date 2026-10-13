@@ -1,7 +1,8 @@
 ---
 title: "Amazing Assets"
 date: 2026-04-01
-tags: ["Identity", "Suffering", "Connection", "Friendship"]
+tags: ["Identity", "Suffering", "Belonging"]
+tone: ["Contemplative"]
 excerpt: "On being listed like assets when you are bleeding at the seams."
 ---
 

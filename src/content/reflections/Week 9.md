@@ -2,7 +2,8 @@
 title: "Dragons and Princesses"
 subtitle: "Week 9"
 date: 2025-10-26
-tags: ["Identity", "Reflection"]
+tags: ["Identity"]
+tone: ["Contemplative"]
 ---
 
 A life spent asking "Who am I?" is a beautiful burden. As Bob Dylan put it, “I change during the course of a day. I wake and I’m one person, and when I go to sleep I know for certain I’m somebody else.” We are fluid—feathers floating in a hurricane—and this constant change brings a natural state of fear. If the man is different from one moment to the next, then what, exactly, is lost?

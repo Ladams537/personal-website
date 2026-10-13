@@ -1,7 +1,8 @@
 ---
 title: "Lads' Night Out"
 date: 2026-02-02
-tags: ["Friends", "Fun", "Comedy"]
+tags: ["Belonging"]
+tone: ["Wit"]
 excerpt: "Five limericks, some truth."
 ---
 Two Indian men corner an Irishman in town, 

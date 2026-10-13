@@ -1,7 +1,8 @@
 ---
 title: "What You Don't Know"
 date: 2026-03-25
-tags: ["Observation", "Modernity", "Wit"]
+tags: ["World"]
+tone: ["Satirical"]
 excerpt: "Three borrowed fears and one quiet truth."
 ---
 

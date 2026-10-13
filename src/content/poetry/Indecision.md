@@ -1,7 +1,8 @@
 ---
 title: "Indecision"
 date: 2026-03-26
-tags: ["Wit", "Observation", "Identity"]
+tags: ["World", "Identity"]
+tone: ["Wit"]
 excerpt: "The body as a mirror for the mind."
 ---
 

@@ -1,7 +1,8 @@
 ---
 title: "My Loughshore"
 date: 2026-03-17
-tags: ["Identity", "Memory", "Home"]
+tags: ["Identity", "Memory", "Belonging"]
+tone: ["Defiant"]
 excerpt: "Nostalgia, pride, and a coke can."
 ---
 

@@ -2,7 +2,8 @@
 title: "Unexpected Teachers"
 subtitle: "Week 7"
 date: 2025-10-12
-tags: ["Relationships", "Growth"]
+tags: ["Belonging", "Growth"]
+tone: ["Contemplative"]
 ---
 
 Unexpected situations have a way of teaching life's most profound lessons, jolting us out of the mundane and into the memorable.

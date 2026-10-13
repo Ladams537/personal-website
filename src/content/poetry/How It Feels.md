@@ -1,7 +1,8 @@
 ---
 title: "How It Feels"
 date: 2026-02-27
-tags: ["Romance", "Poise", "Growth", "Identity"]
+tags: ["Love", "Growth", "Identity"]
+tone: ["Contemplative"]
 excerpt: "Slowing down in a fast world."
 ---
 He wanted what a boy wants. 

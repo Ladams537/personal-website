@@ -1,7 +1,8 @@
 ---
 title: "Character Studies"
 date: 2026-02-02
-tags: ["Satire", "Mundane", "Wit"]
+tags: ["World"]
+tone: ["Wit"]
 excerpt: "Satire play on objectification."
 ---
 

@@ -1,7 +1,8 @@
 ---
 title: "Shallow Roots"
 date: 2026-04-03
-tags: ["Identity", "Connection", "Growth", "Memory"]
+tags: ["Identity", "Belonging", "Growth"]
+tone: ["Contemplative"]
 excerpt: "On belonging to a place your surface has already left."
 ---
 

@@ -1,6 +1,8 @@
 ---
 title: "No Provides Feedback"
 date: 2026-03-19
+tags: ["Growth", "Identity"]
+tone: ["Contemplative"]
 excerpt: "I didn't expect to end up at an EF selection day."
 ---
 

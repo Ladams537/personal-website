@@ -1,6 +1,8 @@
 ---
 title: "Regret as a Compass"
 date: 2026-03-23
+tags: ["Loss", "Growth", "Identity"]
+tone: ["Contemplative"]
 excerpt: "A straps class, a mirror, and what regret is actually for."
 ---
 

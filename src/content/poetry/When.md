@@ -1,7 +1,8 @@
 ---
 title: "When"
 date: 2026-03-10
-tags: ["Romance", "Identity"]
+tags: ["Love", "Identity"]
+tone: ["Longing"]
 excerpt: "Figuring out what I am."
 ---
 Loved Chinese, Persian, Nigerian-Antiguan,

@@ -1,7 +1,8 @@
 ---
 title: "Another Poem"
 date: 2026-02-12
-tags: ["Cathartic", "Suffering", "Hope"]
+tags: ["Suffering", "Hope", "Identity"]
+tone: ["Cathartic"]
 excerpt: "A bad morning made better."
 ---
 

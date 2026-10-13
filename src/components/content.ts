@@ -14,6 +14,8 @@ export interface Item {
   week: number;
   note: string;
   tags: string[];
+  /** How the piece reads; writing only. */
+  tone: string[];
   recorded: boolean;
   /** Projects only: still in active development. */
   ongoing: boolean;
@@ -27,12 +29,12 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 const weekOf = (d: Date) => Math.min(51, Math.floor((d.getTime() - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5 / 7));
 const hasVideo = (body: string) => /<video|<iframe|\.mp4/.test(body);
 
-function item(k: Kind, base: string, e: { slug: string; body: string }, t: string, date: Date | undefined, note: string, tags: string[] = [], ongoing = false): Item {
+function item(k: Kind, base: string, e: { slug: string; body: string }, t: string, date: Date | undefined, note: string, tags: string[] = [], ongoing = false, tone: string[] = []): Item {
   const when = !date ? '' : k === 'project' ? fmtMonth(iso(date)) + (ongoing ? ' – present' : '') : fmt(iso(date));
   return {
     k, t, slug: e.slug, href: `/${base}/${e.slug}/`,
     date: date ? iso(date) : null, year: date?.getUTCFullYear() ?? 0, week: date ? weekOf(date) : 0,
-    note, tags, recorded: hasVideo(e.body), ongoing, when,
+    note, tags, tone, recorded: hasVideo(e.body), ongoing, when,
   };
 }
 
@@ -41,9 +43,9 @@ export async function getArchive(): Promise<Item[]> {
     getCollection('poetry'), getCollection('reflections'), getCollection('essays'), getCollection('projects'),
   ]);
   return [
-    ...poetry.map(e => item('poem', 'poetry', e, e.data.title, e.data.date, e.data.excerpt ?? '', e.data.tags)),
-    ...reflections.map(e => item('reflection', 'reflections', e, e.data.title, e.data.date, e.data.subtitle ?? '', e.data.tags)),
-    ...essays.map(e => item('essay', 'essays', e, e.data.title, e.data.date, e.data.excerpt ?? '', e.data.tags)),
+    ...poetry.map(e => item('poem', 'poetry', e, e.data.title, e.data.date, e.data.excerpt ?? '', e.data.tags, false, e.data.tone)),
+    ...reflections.map(e => item('reflection', 'reflections', e, e.data.title, e.data.date, e.data.subtitle ?? '', e.data.tags, false, e.data.tone)),
+    ...essays.map(e => item('essay', 'essays', e, e.data.title, e.data.date, e.data.excerpt ?? '', e.data.tags, false, e.data.tone)),
     // Descending `order`, so after the Index reverses the (stable) sort, undated projects read 1, 2, 3…
     ...[...projects].sort((x, y) => y.data.order - x.data.order).map(e => item('project', 'projects', e, e.data.title, e.data.date, e.data.summary, e.data.technologies, e.data.ongoing)),
   ].sort((a, b) => (a.date ?? '9999').localeCompare(b.date ?? '9999') || order.indexOf(a.k) - order.indexOf(b.k));

@@ -2,6 +2,7 @@
 title: "Thriving"
 date: 2026-02-27
 tags: ["Suffering", "Identity"]
+tone: ["Defiant"]
 excerpt: "On loneliness dressed as success."
 ---
 

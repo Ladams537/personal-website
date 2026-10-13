@@ -28,7 +28,7 @@ const count = (k: Kind) => rows.filter(r => r.k === k).length;
     <div class="body">
       <ol class="list">
         {rows.map(r => (
-          <li class="row" data-k={r.k} data-d={r.date ?? ''} data-when={r.when} data-note={r.note} data-tags={r.tags.join(' · ')} data-rec={r.recorded ? '1' : undefined}>
+          <li class="row" data-k={r.k} data-d={r.date ?? ''} data-when={r.when} data-note={r.note} data-tags={[...r.tags, ...r.tone.map(t => t.toLowerCase())].join(' · ')} data-rec={r.recorded ? '1' : undefined}>
             <span class="y">{r.date ? r.date.slice(0, 7).replace('-', '.') + (r.ongoing ? ' →' : '') : '—'}</span>
             <span class="kind" style={`--c: var(--k-${r.k})`}>{r.k}</span>
             <a class="t" href={r.href}>{r.t}{r.recorded && <b class="rec" title="Has a recording">● rec</b>}</a>
