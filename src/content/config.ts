@@ -6,6 +6,8 @@ const poetry = defineCollection({
     title: z.string(),
     date: z.date(),
     tags: z.array(z.string()).optional(),
+    // How the piece reads (Wit, Tender, Elegiac…); shown after the themes.
+    tone: z.array(z.string()).optional(),
     excerpt: z.string().optional(),
   }),
 });
@@ -17,6 +19,8 @@ const reflections = defineCollection({
     subtitle: z.string().optional(),
     date: z.date(),
     tags: z.array(z.string()).optional(),
+    // How the piece reads (Wit, Tender, Elegiac…); shown after the themes.
+    tone: z.array(z.string()).optional(),
   }),
 });
 
@@ -26,6 +30,8 @@ const essays = defineCollection({
     title: z.string(),
     date: z.date(),
     tags: z.array(z.string()).optional(),
+    // How the piece reads (Wit, Tender, Elegiac…); shown after the themes.
+    tone: z.array(z.string()).optional(),
     excerpt: z.string().optional(),
   }),
 });
