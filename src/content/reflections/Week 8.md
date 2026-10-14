@@ -2,8 +2,8 @@
 title: "The Magic of Naivety"
 subtitle: "Week 8"
 date: 2025-10-19
-tags: ["Hope"]
-tone: ["Tender"]
+tags: ["Hope", "Love", "Faith"]
+tone: ["Tender", "Contemplative"]
 ---
 
 "To see a world in a grain of sand and a heaven in a wild flower, hold infinity in the palm of your hand and eternity in an hour." — William Blake

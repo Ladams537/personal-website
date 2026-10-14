@@ -2,8 +2,8 @@
 title: "Cycles"
 subtitle: "Week 15"
 date: 2025-12-07
-tags: ["Growth", "Identity"]
-tone: ["Contemplative"]
+tags: ["Identity", "Belonging", "Hope"]
+tone: ["Tender", "Wit"]
 ---
 
 I overheard a conversation on the Tube this week that stopped me cold. Two women, discussing the arc of their lives.

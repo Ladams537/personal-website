@@ -2,8 +2,8 @@
 title: "Taking Life for Granted"
 subtitle: "Week 26"
 date: 2026-02-22
-tags: ["Hope", "Memory"]
-tone: ["Contemplative"]
+tags: ["Memory", "Hope", "Identity"]
+tone: ["Longing", "Contemplative"]
 ---
 
 This life I take for granted.

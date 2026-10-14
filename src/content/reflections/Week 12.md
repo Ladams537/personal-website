@@ -2,8 +2,8 @@
 title: "The Art of Adaptation"
 subtitle: "Week 12"
 date: 2025-11-16
-tags: ["Growth", "Identity"]
-tone: ["Contemplative"]
+tags: ["Identity", "Love", "Loss"]
+tone: ["Longing", "Contemplative"]
 ---
 
 Most of the time, I have no idea what I am doing. I am an amalgamation of passions whirling inside, pulling me in conflicting directions.

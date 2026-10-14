@@ -3,7 +3,7 @@ title: "Stripping Layers"
 subtitle: "Week 19"
 date: 2026-01-04
 tags: ["World", "Identity"]
-tone: ["Contemplative"]
+tone: ["Contemplative", "Wit"]
 ---
 
 Travel has a way of stripping back the layers of the everyday. While an itinerary offers safety, there is a specific, raw power in choosing to have none. Without a map, you don't just see a city; you see the world's bare metal.

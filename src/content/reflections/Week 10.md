@@ -2,8 +2,8 @@
 title: "The Masks We Wear"
 subtitle: "Week 10"
 date: 2025-11-02
-tags: ["Identity"]
-tone: ["Contemplative"]
+tags: ["Identity", "Belonging", "Growth"]
+tone: ["Wit", "Contemplative"]
 ---
 
 "Man is least himself when he talks in his own person," Oscar Wilde wrote. "Give him a mask, and he will tell you the truth."

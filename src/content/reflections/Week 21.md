@@ -2,7 +2,7 @@
 title: "Living the Dream"
 subtitle: "Week 21"
 date: 2026-01-18
-tags: ["Hope", "Growth"]
+tags: ["World", "Identity", "Growth"]
 tone: ["Contemplative"]
 ---
 
