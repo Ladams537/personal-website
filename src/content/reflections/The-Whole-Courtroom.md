@@ -6,9 +6,9 @@ tags: ["Identity", "Suffering"]
 tone: ["Defiant", "Contemplative"]
 ---
 
-I have sinned. Forgive me, Father. I acted out in anger, and that has led me back to You.
+I have sinned. Forgive me Father that this has led me back to You.
 
-I am cut, I am bruised. None around me see it. You do. Right?
+I am cut and bruised and none around can see. You do. Right?
 
 In this cell I’ve created for myself, I stand before my altar, my judge, my jury, my executioner. I do not kneel.
 
