@@ -2,6 +2,8 @@
 title: "Remembrance Day"
 subtitle: "Week 6"
 date: 2026-11-08
+tags: ["Memory", "Identity", "Growth"]
+tone: ["Contemplative", "Longing"]
 ---
 
 The stories I tell myself are the ones I remember, not the stories that actually happened.
