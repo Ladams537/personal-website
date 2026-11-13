@@ -23,7 +23,7 @@ The site has three main pages, and each one belongs to a side of the "seam" betw
 
 Detail pages keep their original URLs (`/poetry/<slug>/`, `/reflections/<slug>/`, `/essays/<slug>/`, `/projects/<slug>/`). Writing pages sit on the light ground and project pages on the dark ground.
 
-The palette ("Lough Shore") lives in `src/components/tokens.css`. `src/components/content.ts` turns the four content collections into the single archive that every page reads.
+The palette ("Lough Shore") lives in `src/components/tokens.css`. `npm run build` first runs `scripts/check-contrast.mjs` (also `npm run check`), which fails if a text colour is too faint on its ground. `src/components/content.ts` turns the four content collections into the single archive that every page reads.
 
 ## Content
 

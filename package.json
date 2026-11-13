@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/check-contrast.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "node scripts/check-contrast.mjs",
     "cv": "SITE_URL=${SITE_URL:-https://personal-website-topaz-two-51.vercel.app} astro build && node scripts/build-cv.mjs"
   },
   "dependencies": {
